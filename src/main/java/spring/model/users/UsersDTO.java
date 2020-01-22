@@ -3,14 +3,14 @@ package spring.model.users;
 import org.springframework.web.multipart.MultipartFile;
 
 public class UsersDTO {
-	private String email;
-	private String nickname;
-	private String password;
+	private String email;		//NN
+	private String nickname;	//NN
+	private String password;	//NN
 	private String introduction;
 	private String birthday;
 	private String fname;
 	private char gender;
-	private char grade;
+	private char grade;			//NN
 	private String create_time;
 	private String update_time;
 	public String getEmail() {

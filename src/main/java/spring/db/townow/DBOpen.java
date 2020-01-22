@@ -1,4 +1,4 @@
-package spring.db.webtest;
+package spring.db.townow;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

@@ -1,4 +1,4 @@
-package spring.model.message;
+jpackage spring.model.message;
 
 import java.util.List;
 import java.util.Map;

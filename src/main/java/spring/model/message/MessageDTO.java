@@ -1,27 +1,24 @@
 package spring.model.message;
 
-import org.springframework.web.multipart.MultipartFile;
-
 public class MessageDTO {
-	private int message_id;
-	private boolean read;
+	private int msg_id;
+	private boolean msg_read;
 	private String recipient;
 	private String sender;
-	private String message_content;
+	private String msg_content;
 	private String create_time;
 	private String update_time;
-	
-	public int getMessage_id() {
-		return message_id;
+	public int getMsg_id() {
+		return msg_id;
 	}
-	public void setMessage_id(int message_id) {
-		this.message_id = message_id;
+	public void setMsg_id(int msg_id) {
+		this.msg_id = msg_id;
 	}
-	public boolean isRead() {
-		return read;
+	public boolean isMsg_read() {
+		return msg_read;
 	}
-	public void setRead(boolean read) {
-		this.read = read;
+	public void setMsg_read(boolean msg_read) {
+		this.msg_read = msg_read;
 	}
 	public String getRecipient() {
 		return recipient;
@@ -35,11 +32,11 @@ public class MessageDTO {
 	public void setSender(String sender) {
 		this.sender = sender;
 	}
-	public String getMessage_content() {
-		return message_content;
+	public String getMsg_content() {
+		return msg_content;
 	}
-	public void setMessage_content(String message_content) {
-		this.message_content = message_content;
+	public void setMsg_content(String msg_content) {
+		this.msg_content = msg_content;
 	}
 	public String getCreate_time() {
 		return create_time;
@@ -53,6 +50,5 @@ public class MessageDTO {
 	public void setUpdate_time(String update_time) {
 		this.update_time = update_time;
 	}
-	
 	
 }
