@@ -1,9 +1,24 @@
 package spring.model.users;
 
 public class UserlocalDTO {
+	private int ul_id;
 	private String email; 
 	private int loc_id; 
 	private int ul_priority;
+	private String create_time;
+	
+	public String getCreate_time() {
+		return create_time;
+	}
+	public void setCreate_time(String create_time) {
+		this.create_time = create_time;
+	}
+	public int getUl_id() {
+		return ul_id;
+	}
+	public void setUl_id(int ul_id) {
+		this.ul_id = ul_id;
+	}
 	public String getEmail() {
 		return email;
 	}

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="users">
+	<insert id="create" parameterType="UsersDTO">
+		insert into users (email, nickname, password, grade, create_time, update_time)
+		values(#{email}, #{nickname}, #{password}, 'U', unix_timestamp(), unix_timestamp())
+	</insert>
+			
+	<select id="read" parameterType="String" resultType="UsersDTO">
+		select email, nickname, introduction, birthday, fname, gender, grade, date_format(create_time), date_format(update_time) 
+		from users
+		where email = #{email}
+	</select>
+	
+	<update id="updateGrade" parameterType="String">
+		update users set
+		grade = #{grade},
+		update_time = unix_timestamp()
+		where email = #{email}
+	</update>
+	
+	<update id="updateIntroduction" parameterType="String">
+		update users set
+		introduction = #{introduction},
+		update_time = unix_timestamp()
+		where email = #{email}
+	</update>
+	
+	<update id="updateFname" parameterType="String">
+		update users set
+		fname = #{fname},
+		update_time = unix_timestamp()
+		where email = #{email}
+	</update>
+	
+	<update id="updateBirthday" parameterType="String">
+		update users set
+		birthday = #{birthday},
+		update_time = unix_timestamp()
+		where email = #{email}
+	</update>
+	
+	<update id="updateGender" parameterType="String">
+		update users set
+		gender = #{gender},
+		update_time = unix_timestamp()
+		where email = #{email}
+	</update>
+	
+	<delete id="delete" parameterType="String">
+		delete from users
+		where email = #{email}
+	</delete>
+	
+	<select id="loginCheck" parameterType="Map">
+		select count(*) from users
+		where email = #{email} and password = #{password}
+	</select>
+	
+	<select id="getFname" parameterType="String" resultType="String">
+		select fname from users where email = #{email}
+	</select>
+	
+	<update id="updatePasswd" parameterType="Map">
+		update users set password = #{newPasswd} where email = #{email}
+	</update>
+	
+	<select id="passwdCheck" parameterType="Map" resultType="int">
+		select count(id) as cnt from users where email = #{email} and password = #{password}
+	</select>
+	
+	<select id="duplicateEmail" parameterType="String"	resultType="int">
+		select count(email) from users where email=#{email}
+	</select>
+	
+	<select id="getPwFind" parameterType="Map" resultType="String">
+		select password from users where email = #{email}
+	</select>
+	
+	<select id="total" parameterType="Map" resultType="int">
+		select count(*) as cnt from users
+		<where>
+			<choose>
+				<when test="col=='email'">
+					email like '%'||#{word}||'%'
+				</when>
+				<when test="col=='nickname'">
+					nickname like '%'||#{word}||'
+				</when>
+			</choose>
+		</where>
+	</select>
+	
+	<select id="list" parameterType="Map" resultType="UsersDTO">
+		SELECT email, nickname, birthday, gender, fname, date_format(create_time), r 
+		from ( SELECT email, nickname, birthday, gender, fname, create_time, rownum r
+		from ( SELECT email, nickname, birthday, gender, fname, create_time
+		FROM users
+		<where>
+			<choose>
+				<when test="col=='email'">
+					email like '%'||#{word}||'%'
+				</when>
+				<when test="col=='nickname'">
+					nickname like '%'||#{word}||'%'
+				</when>
+			</choose>
+		</where>
+		ORDER BY create_time DESC)
+		<![CDATA[)where r>=#{sno} and r<=#{eno}]]>
+	</select>
+
+</mapper>

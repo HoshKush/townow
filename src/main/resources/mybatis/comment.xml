@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="comment">
+<resultMap type="commentDTO" id="commentMap">
+	<result property="cmt_id" column="cmt_id"/>
+	<result property="brd_id" column="brd_id"/>
+	<result property="cmt_like" column="cmt_like"/>
+	<result property="cmt_dislike" column="cmt_dislike"/>
+	<result property="cmt_grp" column="cmt_grp"/>
+	<result property="cmt_content" column="cmt_content"/>
+	<result property="create_time" column="create_time"/>
+	<result property="update_time" column="update_time"/>
+	<result property="usersdto.nickname" column="nickname"/>
+</resultMap>
+<select id="rcount" parameterType="int" resultType="int">
+     SELECT count(*) FROM comment
+     WHERE brd_id = #{brd_id}
+ </select>
+
+<insert id="create" parameterType="commentDTO">
+insert into comment(brd_id, cmt_content, email)
+values(#{brd_id}, #{cmt_contet}, #{email})
+</insert>
+
+<update id="update" parameterType="commentDTO">
+update comment set
+content = #{content},
+update_time = unix_timestamp()
+where cmt_id = #{cmt_id}
+</update>
+
+<update id="likeUp" parameterType="int">
+update comment set
+cmt_like = cmt_like + 1
+where cmt_id = #{cmt_id}
+</update>
+
+<update id="dislikeUp" parameterType="int">
+update comment set
+cmt_dislike = cmt_dislike + 1
+where cmt_id = #{cmt_id}
+</update>
+
+<select id="checkGrp" parameterType="int" resultMap="commentMap">
+select u.nickname nickname from users u, comment c
+where c.cmt_id = #{brd_id} and c.email = u.email
+</select>
+
+<delete id="delete" parameterType="int">
+delete from comment
+where cmt_id = #{cmt_id}
+</delete>
+
+<delete id="deleteAll" parameterType="int">
+delete from comment
+where brd_id = #{brd_id}
+</delete>
+
+<select id="list" parameterType="Map" resultMap="commentMap">
+select 
+cmt_id, cmt_content, create_time, cmt_grp, cmt_like,
+cmt_dislike, brd_id. nickname, r
+from(
+	select
+	cmt_id, cmt_content, create_time, cmt_grp, cmt_like,
+	cmt_dislike, brd_id. nickname, rownum r 
+	from(
+		select 
+		c.cmt_id cmt_id, c.cmt_content cmt_content, c.create_time create_time,
+		c.cmt_grp cmt_grp, c.cmt_like cmt_like, c.cmt_dislike cmt_dislike,
+		c.brd_id brd_id, u.nickname nickname
+		from comment c, users u 
+		where brd_id = #{brd_id}
+		order by cmt_id DESC
+		))
+		<![CDATA[
+		where r >= #{sno} and r<=#{eno}
+		]]>
+</select>
+<select id="total" resultType="int" parameterType="int">
+select count(*) from comment
+where brd_id = #{brd_id}
+</select>
+
+</mapper>

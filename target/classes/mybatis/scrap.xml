@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="scrap">
+	<insert id="create" parameterType="ScrapDTO">
+		insert into scrap(email, brd_id, scr_group, scr_title)
+		value(#{email}, #{brd_id}, #{scr_group}, #{scr_title})	
+	</insert>
+	
+	<update id="updateGroup" parameterType="ScrapDTO">
+		update scrap set
+		scr_group = #{scr_group},
+		create_time = unix_timestamp()
+		where scr_id = #{scr_id}
+	</update>
+	
+	<update id="updateTitle" parameterType="ScrapDTO">
+		update scrap set
+		scr_title = #{scr_Title},
+		create_time = unix_timestamp()
+		where scr_id = #{scr_id}
+	</update>
+		
+	<delete id="delete" parameterType="int">
+		delete from scrap
+		where scr_id = #{scr_id}
+	</delete>
+	
+	<select id="list" parameterType="Map" resultType="ScrapDTO">
+		select scr_id, brd_id, date_format(create_time), scr_group, scr_title, r 
+		from ( select scr_id, brd_id, create_time, scr_group, scr_title, rownum r
+		from ( select scr_id, brd_id, create_time, scr_group, scr_title )
+		FROM scrap
+		<where>
+			email = #{email} and scr_group = #{scr_group}
+		</where>
+		ORDER BY create_time DESC)
+		<![CDATA[)where r>=#{sno} and r<=#{eno}]]>
+	</select>
+</mapper>

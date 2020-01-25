@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="">
+	<insert id="create" parameterType="InterestDTO">
+		insert into interest(ca2_name, email, in_priority)
+		values(#{ca2_name}, #{email}, #{in_priority})
+	</insert>
+	
+	<update id="updatePriority" parameterType="InterestDTO">
+		update interest set
+		in_priority = #{in_priority},
+		create_time = unix_timestamp()
+		where in_id = #{in_id}
+	</update>
+	
+	<delete id="delete" parameterType="int">
+		delete from interest
+		where in_id = #{in_id}
+	</delete>
+	
+	<select id="list" parameterType="Map" resultType="InterestDTO">
+		select in_id, date_format(create_time), ca2_name, in_priority, r 
+		from ( select in_id, create_time, ca2_name, in_priority, rownum r
+		from ( select in_id, create_time, ca2_name, in_priority )
+		FROM interest
+		<where>
+			email = #{email}
+			<choose>
+				<when test="in_priority!=-1">
+					in_priority = #{in_priority}
+				</when>
+			</choose>
+		</where>
+		ORDER BY loc_priority DESC, create_time DESC)
+		<![CDATA[)where r>=#{sno} and r<=#{eno}]]>
+	</select>
+</mapper>

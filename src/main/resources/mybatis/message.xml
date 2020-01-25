@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="message">
+	<insert id="create" parameterType="MessageDTO">
+		insert into message(
+		recipient, sender, msg_content, msg_read
+		) values (
+		#{recipient}, #{sender}, #{msg_content}, #{msg_read}
+		)
+	</insert>
+
+	<select id="read" parameterType="int">
+		select msg_id, recipient,
+		sender, msg_content, create_time, read_time, msg_read
+		from message
+		where msg_id = #{msg_id}
+	</select>
+
+	<update id="cheackRead" parameterType="int">
+		update message set
+		read_time = unix_timestamp()
+		where msg_id = #{msg_id}
+	</update>
+
+	<update id="senderDelete" parameterType="int">
+		update message set
+		msg_delete = 'S'
+		where msg_id = #{msg_id}
+	</update>
+
+	<update id="recipientDelete" parameterType="int">
+		update message set
+		msg_delete = 'R'
+		where msg_id = #{msg_id}
+	</update>
+
+	<delete id="delete" parameterType="int">
+		delete from message
+		where
+		msg_id = #{msg_id}
+	</delete>
+
+	<select id="list" parameterType="Map" resultType="MessageDTO">
+		select
+		msg_id, msg_status, recipient, sender, msg_content, create_time, read_time, r
+		from(
+			select
+			msg_id, msg_status, recipient, sender, msg_content, create_time, read_time, rownum r
+			from(
+				select
+				msg_id, msg_status, recipient, sender, msg_content, create_time, read_time
+				from message
+				<where>
+					<choose>
+						<when test="box=='send'">
+							msg_delete != 'S'
+							and sender = #{email}
+						</when>
+						<when test="box=='recieve">
+							msg_delete != 'R'
+							and recipient = #{email}
+						</when>
+					</choose>
+				</where>
+				order by msg_id DESC
+		))
+		<![CDATA[
+		where r >= #{sno} and r<=#{eno}
+		]]>
+	</select>
+
+</mapper>
