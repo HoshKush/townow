@@ -17,11 +17,17 @@ public class BoardDTO {
 	private String create_time ;
 	private String update_time ;
 	private int loc_id		 ;
-	private String ca2_name	 ;
 	private int like 		 ;
 	private int dislike 	     ;
 	private int viewcount 	 ;
+	private int ca_id;
 	
+	public int getCa_id() {
+		return ca_id;
+	}
+	public void setCa_id(int ca_id) {
+		this.ca_id = ca_id;
+	}
 	public int getBrd_id() {
 		return brd_id;
 	}
@@ -105,12 +111,6 @@ public class BoardDTO {
 	}
 	public void setLoc_id(int loc_id) {
 		this.loc_id = loc_id;
-	}
-	public String getCa2_name() {
-		return ca2_name;
-	}
-	public void setCa2_name(String ca2_name) {
-		this.ca2_name = ca2_name;
 	}
 	public int getLike() {
 		return like;

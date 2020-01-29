@@ -2,11 +2,17 @@ package spring.model.users;
 
 public class InterestDTO {
 	private int in_id;
-	private String ca2_name; 
+	private int ca_id; 
 	private String email; 
 	private int in_priority;
 	private String create_time;
 	
+	public int getCa_id() {
+		return ca_id;
+	}
+	public void setCa_id(int ca_id) {
+		this.ca_id = ca_id;
+	}
 	public String getCreate_time() {
 		return create_time;
 	}
@@ -18,12 +24,6 @@ public class InterestDTO {
 	}
 	public void setIn_id(int in_id) {
 		this.in_id = in_id;
-	}
-	public String getCa2_name() {
-		return ca2_name;
-	}
-	public void setCa2_name(String ca2_name) {
-		this.ca2_name = ca2_name;
 	}
 	public String getEmail() {
 		return email;

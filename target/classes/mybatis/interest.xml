@@ -5,8 +5,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="interest">
 	<insert id="create" parameterType="InterestDTO">
-		insert into interest(ca2_name, email, in_priority)
-		values(#{ca2_name}, #{email}, #{in_priority})
+		insert into interest(ca_id, email, in_priority)
+		values(#{ca_id}, #{email}, #{in_priority})
 	</insert>
 	
 	<update id="updatePriority" parameterType="InterestDTO">
@@ -22,9 +22,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</delete>
 	
 	<select id="list" parameterType="Map" resultType="InterestDTO">
-		select in_id, date_format(create_time), ca2_name, in_priority, r 
-		from ( select in_id, create_time, ca2_name, in_priority, rownum r
-		from ( select in_id, create_time, ca2_name, in_priority )
+		select in_id, date_format(create_time), ca_id, in_priority, r 
+		from ( select in_id, create_time, ca_id, in_priority, rownum r
+		from ( select in_id, create_time, ca_id, in_priority )
 		FROM interest
 		<where>
 			email = #{email}

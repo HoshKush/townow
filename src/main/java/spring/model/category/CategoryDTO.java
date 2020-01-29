@@ -3,6 +3,13 @@ package spring.model.category;
 public class CategoryDTO {
 	private String ca1_name;
 	private String ca2_name;
+	private int ca_id;
+	public int getCa_id() {
+		return ca_id;
+	}
+	public void setCa_id(int ca_id) {
+		this.ca_id = ca_id;
+	}
 	public String getCa1_name() {
 		return ca1_name;
 	}

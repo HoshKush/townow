@@ -20,14 +20,13 @@ public class CategoryDAO implements DAOSTDInter {
 	}
 	@Override
 	public boolean create(Object dto) throws Exception {
-		// TODO Auto-generated method stub
-		return false;
+		return mybatis.insert("category.create", (CategoryDTO) dto) > 0
+				? true : false;
 	}
 
 	@Override
 	public List list(Map map) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		return mybatis.selectList("category.list", map);
 	}
 
 	@Override
@@ -44,33 +43,13 @@ public class CategoryDAO implements DAOSTDInter {
 
 	@Override
 	public boolean delete(Object pk) throws Exception {
-		// TODO Auto-generated method stub
-		return false;
+		return mybatis.delete("category.delete", (int) pk) > 0
+				? true : false;
 	}
 
 	@Override
 	public int total(Map map) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+		return mybatis.selectOne("category.total", map);
 	}
 	
-	public boolean createCategory1(CategoryDTO dto) {
-		return mybatis.insert("category.createCategory1", dto) > 0
-				? true : false;
-	}
-	
-	public boolean createCategory2(CategoryDTO dto) {
-		return mybatis.insert("category.createCategory2", dto) > 0
-				? true : false;
-	}
-	
-	public boolean deleteCategory1(String ca1_name) {
-		return mybatis.delete("category.deleteCategory1", ca1_name) > 0
-				? true : false;
-	}
-	
-	public boolean deleteCategory2(String ca2_name) {
-		return mybatis.delete("category.deleteCategory2", ca2_name) > 0
-				? true : false;
-	}
 }
