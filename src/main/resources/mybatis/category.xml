@@ -12,14 +12,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		insert into category2(ca1_name, ca2_name) value(#{ca1_name}, #{ca2_name})
 	</insert>
 	
-	<delete id="deleteCategory1" parameterType="CategoryDTO">
+	<delete id="deleteCategory1" parameterType="String">
 		delete from category1
 		where ca1_name = #{ca1_name}
 	</delete>
 	
-	<delete id="deleteCategory2" parameterType="CategoryDTO">
+	<delete id="deleteCategory2" parameterType="String">
 		delete from category2
 		where ca2_name = #{ca2_name}
 	</delete>
-
 </mapper>

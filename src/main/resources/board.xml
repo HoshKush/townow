@@ -25,14 +25,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     	<result property="usersdto.nickname" column="nickname"/>
     </resultMap>
 	<delete id="delete" parameterType="int">
-		DELETE FROM board WHERE brd_id = #{pk}
+		DELETE FROM board WHERE brd_id = #{brd_id}
 	</delete>
 	
-	<select id="isWriter" parameterType="String" resultType="int">
-		select count(*) from board where email = #{email}
-	</select>
-	
-	<select id="hasGroup" parameterType="int" resultType="int">
+	<select id="checkGrpno" parameterType="int" resultType="int">
 	SELECT count(grpno) FROM board WHERE grpno = #{brd_id}
 	</select>
 
@@ -45,10 +41,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<update id="updateAnsnum" parameterType="Map">
 	UPDATE board SET ansnum = ansnum + 1 WHERE grp = #{grp} and ansnum > #{ansnum}
 	</update>
-	
 	<select id="readReply" parameterType="int" resultType="BoardDTO">
 	 SELECT title, grp, indent, ansnum 
-	 FROM board WHERE brd_id = #{brd_ide}
+	 FROM board WHERE brd_id = #{brd_id}
 	</select>
 	
 	<update id="update" parameterType="BoardDTO">
@@ -61,7 +56,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</if>
 	 WHERE brd_id = #{brd_id}
 	</update>
-	<update id="viewcount" parameterType="int">
+	<update id="viewCount" parameterType="int">
 		UPDATE board SET
 		viewcount = viewcount + 1
 		WHERE brd_id = #{brd_id}
@@ -130,28 +125,29 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		b.brd_id, b.title, b.content, b.fname, b.media, b.grp, b.email, b.date_format(create_time), b.date_format(update_time),
 		b.ca2_name, b.like, b.dislike, b.viewcount, u.nickname, l.state, l.city, l.gu, l.dong
 		from board b, users u, local l
-		where b.brd_id = #{pk} and b.email = u.email and b.loc_id = l.loc_id 
+		where b.brd_id = #{brd_id} and b.email = u.email and b.loc_id = l.loc_id 
 	</select>
 
 	<select id="total" parameterType="Map" resultType="int">
 		SELECT COUNT(*) FROM board, 
 		<where>
 			loc_id = #{loc_id} and
-			ca2_name = #{ca2_name}
+			ca2_name = #{ca2_name} and
 			<choose>
 				<when test="col=='nickname'">
-					and name like '%'||#{word}||'%'
+					name like '%'||#{word}||'%'
 				</when>
 				<when test="col=='subject'">
-					and subject like '%'||#{word}||'%'
+					subject like '%'||#{word}||'%'
 				</when>
 				<when test="col=='content'">
-					and content like '%'||#{word}||'%'
+					content like '%'||#{word}||'%'
 				</when>
 				<otherwise>
-					and subject like '%'||#{word}||'%'
+					subject like '%'||#{word}||'%'
 					or
-					content like '%'||#{word}||'%'
+					content like
+					'%'||#{word}||'%'
 				</otherwise>
 			</choose>
 		</where>

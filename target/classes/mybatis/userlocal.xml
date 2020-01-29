@@ -18,7 +18,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<delete id="delete" parameterType="int">
 		delete from userlocal
-		where ul_id = #{ul_id}
+		where ul_id = #{pk}
 	</delete>
 	
 	<select id="list" parameterType="Map" resultType="UserlocalDTO" >
@@ -30,11 +30,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			email = #{email}
 			<choose>
 				<when test="in_priority!=-1">
-					ul_priority = #{ul_priority}
+					and ul_priority = #{ul_priority}
 				</when>
 			</choose>
 		</where>
 		ORDER BY ul_priority DESC, create_time DESC)
 		<![CDATA[)where r>=#{sno} and r<=#{eno}]]>
+	</select>
+	
+	<select id="total" parameterType="Map" resultType="int">
+		select count(*) from userlocal
+		<where>
+			email = #{email}
+			<choose>
+				<when test="in_priority!=-1">
+					and ul_priority = #{ul_priority}
+				</when>
+			</choose>
+		</where>
 	</select>
 </mapper>

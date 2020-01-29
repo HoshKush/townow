@@ -11,7 +11,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="read" parameterType="String" resultType="UsersDTO">
 		select email, nickname, introduction, birthday, fname, gender, grade, date_format(create_time), date_format(update_time) 
 		from users
-		where email = #{email}
+		where email = #{pk}
 	</select>
 	
 	<update id="updateGrade" parameterType="String">
@@ -51,11 +51,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<delete id="delete" parameterType="String">
 		delete from users
-		where email = #{email}
+		where email = #{pk}
 	</delete>
 	
-	<select id="loginCheck" parameterType="Map">
-		select count(*) from users
+	<select id="loginCheck" parameterType="Map" resultType="int">
+		select count(*) as cnt from users
 		where email = #{email} and password = #{password}
 	</select>
 	

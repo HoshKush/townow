@@ -25,7 +25,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		
 	<delete id="delete" parameterType="int">
 		delete from scrap
-		where scr_id = #{scr_id}
+		where scr_id = #{pk}
 	</delete>
 	
 	<select id="list" parameterType="Map" resultType="ScrapDTO">
@@ -34,9 +34,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		from ( select scr_id, brd_id, create_time, scr_group, scr_title )
 		FROM scrap
 		<where>
-			email = #{email} and scr_group = #{scr_group}
+			email = #{email}
+			<if test="scr_group != null">
+			 and scr_group = #{scr_group}
+			</if>
 		</where>
 		ORDER BY create_time DESC)
 		<![CDATA[)where r>=#{sno} and r<=#{eno}]]>
 	</select>
+	
+	<select id="total" parameterType="Map" resultType="int">
+		select count(*) from scrap
+		where email = #{email} and scr_group
+ 	</select>
 </mapper>

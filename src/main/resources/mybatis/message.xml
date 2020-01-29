@@ -16,10 +16,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select msg_id, recipient,
 		sender, msg_content, create_time, read_time, msg_read
 		from message
-		where msg_id = #{msg_id}
+		where msg_id = #{pk}
 	</select>
 
-	<update id="cheackRead" parameterType="int">
+	<update id="checkRead" parameterType="int">
 		update message set
 		read_time = unix_timestamp()
 		where msg_id = #{msg_id}
@@ -40,7 +40,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<delete id="delete" parameterType="int">
 		delete from message
 		where
-		msg_id = #{msg_id}
+		msg_id = #{pk}
 	</delete>
 
 	<select id="list" parameterType="Map" resultType="MessageDTO">
@@ -70,6 +70,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<![CDATA[
 		where r >= #{sno} and r<=#{eno}
 		]]>
+	</select>
+	
+	<select id="total" parameterType="Map" resultType="int">
+		select count(*) from message
+		<where>
+			<choose>
+				<when test="box=='send'">
+					msg_delete != 'S'
+					and sender = #{email}
+				</when>
+				<when test="box=='recieve">
+					msg_delete != 'R'
+					and recipient = #{email}
+				</when>
+			</choose>
+		</where>
 	</select>
 
 </mapper>

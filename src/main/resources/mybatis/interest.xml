@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="">
+<mapper namespace="interest">
 	<insert id="create" parameterType="InterestDTO">
 		insert into interest(ca2_name, email, in_priority)
 		values(#{ca2_name}, #{email}, #{in_priority})
@@ -18,7 +18,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<delete id="delete" parameterType="int">
 		delete from interest
-		where in_id = #{in_id}
+		where in_id = #{pk}
 	</delete>
 	
 	<select id="list" parameterType="Map" resultType="InterestDTO">
@@ -30,11 +30,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			email = #{email}
 			<choose>
 				<when test="in_priority!=-1">
-					in_priority = #{in_priority}
+					and in_priority = #{in_priority}
 				</when>
 			</choose>
 		</where>
 		ORDER BY loc_priority DESC, create_time DESC)
 		<![CDATA[)where r>=#{sno} and r<=#{eno}]]>
+	</select>
+	
+	<select id="total" parameterType="Map" resultType="int">
+		select count(*) from interest
+		<where>
+			email = #{email}
+			<choose>
+				<when test="in_priority!=-1">
+					and in_priority = #{in_priority}
+				</when>
+			</choose>
+		</where>
 	</select>
 </mapper>

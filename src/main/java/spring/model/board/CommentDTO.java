@@ -8,8 +8,16 @@ public class CommentDTO {
 	private int cmt_grp;
 	private String email;
 	private String cmt_content;
+	private String cmt_email;
 	private String create_time;
 	private String update_time;
+	
+	public String getCmt_email() {
+		return cmt_email;
+	}
+	public void setCmt_email(String cmt_email) {
+		this.cmt_email = cmt_email;
+	}
 	public int getCmt_id() {
 		return cmt_id;
 	}

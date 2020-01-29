@@ -11,7 +11,42 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<delete id="delete" parameterType="int">
 		delete from local
-		where loc_id = #{loc_id}
+		where loc_id = #{pk}
 	</delete>
+	
+	<select id="list" parameterType="Map" resultType="LocalDTO">
+		select loc_id, state, city, dong, gu, r 
+		from ( select loc_id, state, city, dong, gu, rownum r
+		from ( select loc_id, state, city, dong, gu )
+		FROM local
+		<where>
+			<if test="state != null">
+			 and state = #{state}
+			</if>
+			<if test="city != null">
+			 and city = #{city}
+			</if>
+			<if test="gu != null">
+			 and gu = #{gu}
+			</if>
+		</where>
+		ORDER BY state ASC, city ASC, gu ASC, dong ASC)
+		<![CDATA[)where r>=#{sno} and r<=#{eno}]]>
+	</select>
+	
+	<select id="total" parameterType="Map" resultType="int">
+		select count(*) from local
+		<where>
+			<if test="state != null">
+			 and state = #{state}
+			</if>
+			<if test="city != null">
+			 and city = #{city}
+			</if>
+			<if test="gu != null">
+			 and gu = #{gu}
+			</if>
+		</where>
+	</select>
 
 </mapper>

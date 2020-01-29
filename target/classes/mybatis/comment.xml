@@ -4,28 +4,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="comment">
-<resultMap type="commentDTO" id="commentMap">
-	<result property="cmt_id" column="cmt_id"/>
-	<result property="brd_id" column="brd_id"/>
-	<result property="cmt_like" column="cmt_like"/>
-	<result property="cmt_dislike" column="cmt_dislike"/>
-	<result property="cmt_grp" column="cmt_grp"/>
-	<result property="cmt_content" column="cmt_content"/>
-	<result property="create_time" column="create_time"/>
-	<result property="update_time" column="update_time"/>
-	<result property="usersdto.nickname" column="nickname"/>
-</resultMap>
-<select id="rcount" parameterType="int" resultType="int">
-     SELECT count(*) FROM comment
-     WHERE brd_id = #{brd_id}
- </select>
+<!-- <resultMap type="commentDTO" id="commentMap"> -->
+<!-- 	<result property="cmt_id" column="cmt_id"/> -->
+<!-- 	<result property="brd_id" column="brd_id"/> -->
+<!-- 	<result property="cmt_like" column="cmt_like"/> -->
+<!-- 	<result property="cmt_dislike" column="cmt_dislike"/> -->
+<!-- 	<result property="cmt_grp" column="cmt_grp"/> -->
+<!-- 	<result property="cmt_content" column="cmt_content"/> -->
+<!-- 	<result property="create_time" column="create_time"/> -->
+<!-- 	<result property="update_time" column="update_time"/> -->
+<!-- 	<result property="usersdto.nickname" column="nickname"/> -->
+<!-- </resultMap> -->
 
-<insert id="create" parameterType="commentDTO">
-insert into comment(brd_id, cmt_content, email)
-values(#{brd_id}, #{cmt_contet}, #{email})
+<insert id="create" parameterType="CommentDTO">
+insert into comment(brd_id, cmt_content, email, cmt_grp)
+values(#{brd_id}, #{cmt_contet}, #{email}, #{cmt_grp})
 </insert>
 
-<update id="update" parameterType="commentDTO">
+<update id="update" parameterType="CommentDTO">
 update comment set
 content = #{content},
 update_time = unix_timestamp()
@@ -44,14 +40,18 @@ cmt_dislike = cmt_dislike + 1
 where cmt_id = #{cmt_id}
 </update>
 
-<select id="checkGrp" parameterType="int" resultMap="commentMap">
-select u.nickname nickname from users u, comment c
-where c.cmt_id = #{brd_id} and c.email = u.email
+<select id="hasGroup" parameterType="int" resultType="String">
+select count(*) from comment where cmt_grp = {cmt_id}
+</select>
+
+<select id="nicknameOf" parameterType="int" resultType="String">
+select u.nickname as nickname from users as u, comment as c
+where cmt_id = #{cmt_id} and u.email = c.email
 </select>
 
 <delete id="delete" parameterType="int">
 delete from comment
-where cmt_id = #{cmt_id}
+where cmt_id = #{pk}
 </delete>
 
 <delete id="deleteAll" parameterType="int">
@@ -59,20 +59,19 @@ delete from comment
 where brd_id = #{brd_id}
 </delete>
 
-<select id="list" parameterType="Map" resultMap="commentMap">
+<select id="list" parameterType="Map" resultMap="commentDTO">
 select 
 cmt_id, cmt_content, create_time, cmt_grp, cmt_like,
-cmt_dislike, brd_id. nickname, r
+cmt_dislike, brd_id, r
 from(
 	select
 	cmt_id, cmt_content, create_time, cmt_grp, cmt_like,
-	cmt_dislike, brd_id. nickname, rownum r 
+	cmt_dislike, brd_id, rownum r 
 	from(
 		select 
-		c.cmt_id cmt_id, c.cmt_content cmt_content, c.create_time create_time,
-		c.cmt_grp cmt_grp, c.cmt_like cmt_like, c.cmt_dislike cmt_dislike,
-		c.brd_id brd_id, u.nickname nickname
-		from comment c, users u 
+		cmt_id, cmt_content, create_time, cmt_grp, cmt_like, cmt_dislike,
+		brd_id
+		from comment 
 		where brd_id = #{brd_id}
 		order by cmt_id DESC
 		))
@@ -80,7 +79,8 @@ from(
 		where r >= #{sno} and r<=#{eno}
 		]]>
 </select>
-<select id="total" resultType="int" parameterType="int">
+
+<select id="total" resultType="int" parameterType="Map">
 select count(*) from comment
 where brd_id = #{brd_id}
 </select>
