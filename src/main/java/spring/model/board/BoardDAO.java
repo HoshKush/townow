@@ -35,7 +35,7 @@ public class BoardDAO implements DAOSTDInter {
 	@Override
 	public Object read(Object pk) throws Exception {
 		// TODO Auto-generated method stub
-		return (BoardDTO) mybatis.selectOne("board.read", (int) pk);
+		return (BoardDTO) mybatis.selectOne("board.read", (Integer) pk);
 	}
 
 	@Override
@@ -48,7 +48,7 @@ public class BoardDAO implements DAOSTDInter {
 	@Override
 	public boolean delete(Object pk) throws Exception {
 		// TODO Auto-generated method stub
-		return mybatis.delete("board.delete", (int) pk) > 0
+		return mybatis.delete("board.delete", (Integer) pk) > 0
 				? true : false;
 	}
 
@@ -58,42 +58,42 @@ public class BoardDAO implements DAOSTDInter {
 		return mybatis.selectOne("board.total", map);
 	}
 	
-	public boolean isWriterk(String email) {
-		return (int) mybatis.selectOne("board.isWriter", email) > 0
+	public boolean isWriter(String email) {
+		return (Integer) mybatis.selectOne("board.isWriter", email) > 0
 				? true : false;
 	}
 	
-	public boolean viewcount(int brd_id) {
-		return mybatis.update("board.viewcount", brd_id) > 0 
+	public boolean updateViewcount(int brd_id) {
+		return mybatis.update("board.updateViewcount", brd_id) > 0 
 				? true : false;
 	}
 	
-	public boolean hasGroup (int grpno) {
-		return (int) mybatis.selectOne("board.hasGroup", grpno) > 0
+	public boolean hasGroup (int brd_id) {
+		return (Integer) mybatis.selectOne("board.hasGroup", brd_id) > 0
 				? true : false;
 	}
 	
-	public boolean updateAnsnum (Map map) {
-		return mybatis.update("board.updateAnsnum", map) > 0
+	public boolean updateAnsno (Map map) {
+		return mybatis.update("board.updateAnsno", map) > 0
 				? true : false;
 	}
 	
-	public boolean likeUp(int brd_id) {
-		return mybatis.update("board.likeUp", brd_id) > 0
+	public boolean updateLike(int brd_id) {
+		return mybatis.update("board.updateLike", brd_id) > 0
 				? true : false;
 	}
 	
-	public boolean dislikeUp(int brd_id) {
-		return mybatis.update("board.dislikeUp", brd_id) > 0
+	public boolean updateDislike(int brd_id) {
+		return mybatis.update("board.updateDislike", brd_id) > 0
 				? true : false;
 	}
 	
-	public boolean insertReply(BoardDTO dto) {
-		return mybatis.insert("board.insertReply", dto) > 0
+	public boolean createReply(BoardDTO dto) {
+		return mybatis.insert("board.createReply", dto) > 0
 				? true : false;
 	}
 	
-	public BoardDTO readReply(int brd_id) {
-		return mybatis.selectOne("readReply", brd_id);
+	public BoardDTO readToReply(int brd_id) {
+		return mybatis.selectOne("board.readReply", brd_id);
 	}
 }

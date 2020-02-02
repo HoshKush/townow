@@ -6,9 +6,9 @@ public class BoardDTO {
 	private int brd_id	 	;
 	private String title	 	;
 	private String content	;
-	private String fname	 	;
+	private String filename	 	;
+	private int filesize	 	;
 	private MultipartFile filenameMF;
-	private String media	 	;
 	private int grpno	 	;
 	private int indent	 	;
 	private int ansno	 	;
@@ -46,23 +46,23 @@ public class BoardDTO {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public String getFname() {
-		return fname;
+	public String getFilename() {
+		return filename;
 	}
-	public void setFname(String fname) {
-		this.fname = fname;
+	public void setFilename(String filename) {
+		this.filename = filename;
+	}
+	public int getFilesize() {
+		return filesize;
+	}
+	public void setFilesize(int filesize) {
+		this.filesize = filesize;
 	}
 	public MultipartFile getFilenameMF() {
 		return filenameMF;
 	}
 	public void setFilenameMF(MultipartFile filenameMF) {
 		this.filenameMF = filenameMF;
-	}
-	public String getMedia() {
-		return media;
-	}
-	public void setMedia(String media) {
-		this.media = media;
 	}
 	public int getGrpno() {
 		return grpno;

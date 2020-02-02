@@ -59,7 +59,7 @@ delete from comment
 where brd_id = #{brd_id}
 </delete>
 
-<select id="list" parameterType="Map" resultMap="commentDTO">
+<select id="list" parameterType="Map" resultType="CommentDTO">
 select 
 cmt_id, cmt_content, create_time, cmt_grp, cmt_like,
 cmt_dislike, brd_id, r

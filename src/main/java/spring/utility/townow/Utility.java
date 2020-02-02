@@ -25,11 +25,12 @@ public class Utility {
 	  * @param bbsno 상위글번호
 	  * @return 페이징 생성 문자열
 	  */ 
-	 public static String paging(int totalRecord, int nPage, int recordPerPage,String url,int bbsno,int nowPage, String col, String word){ 
+	 public static String paging(int totalRecord, int recordPerPage, String url,
+			 int brd_id, int ca_id, int loc_id, int nowPage, String col, String word){ 
 	   int pagePerBlock = 10; // 블럭당 페이지 수 
 	   int totalPage = (int)(Math.ceil((double)totalRecord/recordPerPage)); // 전체 페이지  
 	   int totalGrp = (int)(Math.ceil((double)totalPage/pagePerBlock));// 전체 그룹 
-	   int nowGrp = (int)(Math.ceil((double)nPage/pagePerBlock));    // 현재 그룹 
+	   int nowGrp = (int)(Math.ceil((double)nowPage/pagePerBlock));    // 현재 그룹 
 	   int startPage = ((nowGrp - 1) * pagePerBlock) + 1; // 특정 그룹의 페이지 목록 시작  
 	   int endPage = (nowGrp * pagePerBlock);             // 특정 그룹의 페이지 목록 종료   
 	    
@@ -66,7 +67,7 @@ public class Utility {
 	 
 	   int _nPage = (nowGrp-1) * pagePerBlock; // 10개 이전 페이지로 이동 
 	   if (nowGrp >= 2){ 
-	     str.append("<span class='span_box_1'><A href='./"+url+"?nowPage="+nowPage+"&col="+col+"&word="+word+"&bbsno="+bbsno+"&nPage="+_nPage+"'>이전</A></span>"); 
+	     str.append("<span class='span_box_1'><A href='./"+url+"?nowPage="+nowPage+"&col="+col+"&word="+word+"&brd_id="+brd_id+"&ca_id="+ca_id+"&loc_id="+loc_id+"'>이전</A></span>"); 
 	   } 
 	 
 	   for(int i=startPage; i<=endPage; i++){ 
@@ -74,16 +75,16 @@ public class Utility {
 	       break; 
 	     } 
 	 
-	     if (nPage == i){ 
+	     if (nowPage == i){ 
 	       str.append("<span class='span_box_2'>"+i+"</span>"); 
 	     }else{ 
-	       str.append("<span class='span_box_1'><A href='./"+url+"?nowPage="+nowPage+"&col="+col+"&word="+word+"&bbsno="+bbsno+"&nPage="+i+"'>"+i+"</A></span>");   
+	       str.append("<span class='span_box_1'><A href='./"+url+"?nowPage="+i+"&col="+col+"&word="+word+"&brd_id="+brd_id+"&ca_id="+ca_id+"&loc_id="+loc_id+"'>"+i+"</A></span>");   
 	     } 
 	   } 
 	    
 	   _nPage = (nowGrp * pagePerBlock)+1; // 10개 다음 페이지로 이동 
 	   if (nowGrp < totalGrp){ 
-	     str.append("<span class='span_box_1'><A href='./"+url+"?nowPage="+nowPage+"&col="+col+"&word="+word+"&bbsno="+bbsno+"&nPage="+_nPage+"'>다음</A></span>"); 
+	     str.append("<span class='span_box_1'><A href='./"+url+"?nowPage="+nowPage+"&col="+col+"&word="+word+"&brd_id="+brd_id+"&ca_id="+ca_id+"&loc_id="+loc_id+"'>다음</A></span>"); 
 	   } 
 	   str.append("</DIV>"); 
 	    

@@ -11,8 +11,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     	<result property="email" column="email"/>
     	<result property="create_tiime" column="create_time"/>
     	<result property="update_time" column="update_time"/>
-    	<result property="fname" column="fname"/>
-    	<result property="media" column="media"/>
+    	<result property="filename" column="filename"/>
+    	<result property="filesize" column="filesize"/>
     	<result property="grp" column="grp"/>
     	<result property="ca_id" column="ca_id"/>
     	<result property="like"	column="like"/>
@@ -36,18 +36,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	SELECT count(grpno) FROM board WHERE grpno = #{brd_id}
 	</select>
 
-	<insert id="insertReply" parameterType="BoardDTO">
-	INSERT INTO board(email, title, content, fname, media, loc_id, ca_id, create_time, ref, indent, ansnum, refnum)
-	VALUES(#{email}, #{title}, #{content}, #{fname, jdbcType=VARCHAR}, #{media, jdbcType=VARCHAR}, 
-		#{loc_id}, #{ca_id}, unix_timestamp(), #{grp}, #{indent}+1, #{ansnum}+1, #{brd_id})
+	<insert id="createReply" parameterType="BoardDTO">
+	INSERT INTO board(email, title, content, filename, filesize, loc_id, ca_id, create_time, ref, indent, ansno, refnum)
+	VALUES(#{email}, #{title}, #{content}, #{filename, jdbcType=VARCHAR}, #{filesize, jdbcType=VARCHAR}, 
+		#{loc_id}, #{ca_id}, unix_timestamp(), #{grp}, #{indent}+1, #{ansno}+1, #{brd_id})
 	</insert>
 
-	<update id="updateAnsnum" parameterType="Map">
-	UPDATE board SET ansnum = ansnum + 1 WHERE grp = #{grp} and ansnum > #{ansnum}
+	<update id="updateAnsno" parameterType="Map">
+	UPDATE board SET ansno = ansno + 1 WHERE grp = #{grp} and ansno > #{ansno}
 	</update>
 	
 	<select id="readReply" parameterType="int" resultType="BoardDTO">
-	 SELECT title, grp, indent, ansnum 
+	 SELECT title, grp, indent, ansno 
 	 FROM board WHERE brd_id = #{brd_id}
 	</select>
 	
@@ -56,7 +56,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	update_time = unix_timestamp(),
 	title = #{title},
 	content = #{content}
-	<if test="fname != null and !fname.equals('')">
+	<if test="filename != null and !filename.equals('')">
 	filename= #{filename},
 	</if>
 	 WHERE brd_id = #{brd_id}
@@ -66,12 +66,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		viewcount = viewcount + 1
 		WHERE brd_id = #{brd_id}
 	</update>
-	<update id="likeUp" parameterType="int">
+	<update id="updateLike" parameterType="int">
 		UPDATE board SET
 		like = like + 1
 		WHERE brd_id = #{brd_id}
 	</update>
-	<update id="dislikeUp" parameterType="int">
+	
+	<update id="updateDislike" parameterType="int">
 		UPDATE board SET
 		dislike = dislike + 1
 		WHERE brd_id = #{brd_id}
@@ -79,55 +80,59 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<insert id="create" parameterType="BoardDTO">
 		INSERT INTO board(
-		email, title, content, fname, media, loc_id, ca_id, create_time)
+		email, title, content, filename, filesize, loc_id, ca_id, create_time)
 		VALUES(
-		#{email}, #{title}, #{content}, #{fname, jdbcType=VARCHAR}, #{media, jdbcType=VARCHAR}, 
+		#{email}, #{title}, #{content}, #{filename, jdbcType=VARCHAR}, #{filesize}, 
 		#{loc_id}, #{ca_id}, unix_timestamp())
 	</insert> 
 
 	<select id="list" resultMap="oneMap" parameterType="Map">
 		select
-		title, nickname, date_format(create_time) time, fname, indent, like, dislike, viewcount, r
+		title, nickname, date_format(create_time) time, filename, indent, like, dislike, viewcount, r
 		from(
 		select
-		title, nickname, time, fname, indent, like, dislike, viewcount, rownum r
+		title, nickname, time, filename, indent, like, dislike, viewcount, rownum r
 		from (
 		select
-		b.title title, u.nickname nickname, b.create_time time, b.fname fname, b.indent indent,
+		b.title title, u.nickname nickname, b.create_time time, b.filename filename, b.indent indent,
 		b.like like, b.dislike dislike, b.viewcount viewcount
 		from board b, users u
 		<where>
+			<if test="loc_id!=null">
 			b.loc_id = #{loc_id} and
-			b.ca_id = #{ca_id} and
+			</if>
+			<if test="ca_id!=null">
+			b.ca_id = #{ca_id}
+			</if>
 			<choose>
 				<when test="col=='nickname'">
-					name like '%'||#{word}||'%'
+					and	name like '%'||#{word}||'%'
 				</when>
 				<when test="col=='subject'">
-					subject like '%'||#{word}||'%'
+					and	subject like '%'||#{word}||'%'
 				</when>
 				<when test="col=='content'">
-					content like '%'||#{word}||'%'
+					and	content like '%'||#{word}||'%'
 				</when>
 				<otherwise>
-					subject like '%'||#{word}||'%'
+					and	subject like '%'||#{word}||'%'
 					or
 					content like
 					'%'||#{word}||'%'
 				</otherwise>
 			</choose>
 		</where>
-		ORDER BY grp DESC, ansnum ASC
+		ORDER BY grp DESC, ansno ASC
 		)
 		)                                                                            
    <![CDATA[                                                                        
-   where r>=#{sno} and r<=${eno}  
+   where r >= #{sno} and r <= ${eno}  
    ]]>
 	</select>
 
 	<select id="read" resultMap="oneMap" parameterType="int">
 		select
-		b.brd_id, b.title, b.content, b.fname, b.media, b.grp, b.email, b.date_format(create_time), b.date_format(update_time),
+		b.brd_id, b.title, b.content, b.filename, b.filesize, b.grp, b.email, b.date_format(create_time), b.date_format(update_time),
 		b.ca_id, b.like, b.dislike, b.viewcount, u.nickname, l.state, l.city, l.gu, l.dong
 		from board b, users u, local l
 		where b.brd_id = #{pk} and b.email = u.email and b.loc_id = l.loc_id 
@@ -136,8 +141,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="total" parameterType="Map" resultType="int">
 		SELECT COUNT(*) FROM board, 
 		<where>
-			loc_id = #{loc_id} and
-			ca_id = #{ca_id}
+			<if test="loc_id!=null">
+			b.loc_id = #{loc_id} and
+			</if>
+			<if test="ca_id!=null">
+			b.ca_id = #{ca_id}
+			</if>
 			<choose>
 				<when test="col=='nickname'">
 					and name like '%'||#{word}||'%'
@@ -150,7 +159,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				</when>
 				<otherwise>
 					and subject like '%'||#{word}||'%'
-					or
+					or 
 					content like '%'||#{word}||'%'
 				</otherwise>
 			</choose>
