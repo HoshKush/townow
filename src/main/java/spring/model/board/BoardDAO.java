@@ -35,7 +35,7 @@ public class BoardDAO implements DAOSTDInter {
 	@Override
 	public Object read(Object pk) throws Exception {
 		// TODO Auto-generated method stub
-		return (BoardDTO) mybatis.selectOne("board.read", (Integer) pk);
+		return (BoardJoinedDTO) mybatis.selectOne("board.read", (Integer) pk);
 	}
 
 	@Override

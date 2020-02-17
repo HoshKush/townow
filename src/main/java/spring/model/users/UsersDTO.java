@@ -9,10 +9,18 @@ public class UsersDTO {
 	private String introduction;
 	private String birthday;
 	private String fname;
+	private MultipartFile fnameMF;
 	private char gender;
 	private char grade;			//NN
 	private String create_time;
 	private String update_time;
+	
+	public MultipartFile getFnameMF() {
+		return fnameMF;
+	}
+	public void setFnameMF(MultipartFile fnameMF) {
+		this.fnameMF = fnameMF;
+	}
 	public String getEmail() {
 		return email;
 	}

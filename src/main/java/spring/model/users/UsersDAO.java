@@ -34,7 +34,7 @@ public class UsersDAO implements DAOSTDInter {
 	@Override
 	public Object read(Object pk) throws Exception {
 		// TODO Auto-generated method stub
-		return mybatis.selectOne("users.read", (int) pk);
+		return mybatis.selectOne("users.read", (Integer) pk);
 	}
 
 	@Override
@@ -47,7 +47,7 @@ public class UsersDAO implements DAOSTDInter {
 	@Override
 	public boolean delete(Object pk) throws Exception {
 		// TODO Auto-generated method stub
-		return mybatis.delete("users.delete", (int) pk) > 0
+		return mybatis.delete("users.delete", (Integer) pk) > 0
 				? true : false;
 	}
 
@@ -83,7 +83,7 @@ public class UsersDAO implements DAOSTDInter {
 	}
 	
 	public boolean loginCheck(Map map) {
-		return (int) mybatis.selectOne("users.loginCheck", map) > 0
+		return (Integer) mybatis.selectOne("users.loginCheck", map) > 0
 				? true : false;
 	}
 	
@@ -97,13 +97,12 @@ public class UsersDAO implements DAOSTDInter {
 	}
 	
 	public boolean passwdCheck(Map map) {
-		return (int) mybatis.selectOne("users.passwdCheck", map) > 0
+		return (Integer) mybatis.selectOne("users.passwdCheck", map) > 0
 				? true : false;
 	}
 	
-	public boolean duplicateEmail(String email) {
-		return (int) mybatis.selectOne("users.duplicateEmail", email) > 0 
-				? true : false;
+	public int duplicateEmail(String email) {
+		return (Integer) mybatis.selectOne("users.duplicateEmail", email);
 	}
 	
 	public String getPwFind(Map map) {

@@ -23,12 +23,12 @@ public class BoardService {
 	public boolean reply(BoardDTO dto) {
 		
 		boolean flag = false;
-		BoardDTO rdto = dao.readToReply(dto.getBrd_id());
-		
+//		BoardDTO rdto = dao.readToReply(dto.getBrd_id());
+		System.out.println(dto.getBrd_id());
 		
 		Map map = new HashMap();
-		map.put("grp", rdto.getGrp());
-		map.put("ansno", rdto.getAnsno());
+		map.put("grp", dto.getGrp());
+		map.put("ansno", dto.getAnsno());
 		
 		dao.updateAnsno(map);	
 		return dao.createReply(dto);

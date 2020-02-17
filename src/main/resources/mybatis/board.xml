@@ -4,25 +4,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="board">
-	 <resultMap type="BoardDTO" id="oneMap">
+	
+	<resultMap type="BoardJoinedDTO" id="oneMap">
     	<result property="brd_id" column="brd_id"/>
     	<result property="title" column="title"/>
     	<result property="content" column="content"/>
     	<result property="email" column="email"/>
-    	<result property="create_tiime" column="create_time"/>
+    	<result property="create_time" column="create_time"/>
     	<result property="update_time" column="update_time"/>
     	<result property="filename" column="filename"/>
     	<result property="filesize" column="filesize"/>
     	<result property="grp" column="grp"/>
     	<result property="ca_id" column="ca_id"/>
-    	<result property="like"	column="like"/>
-    	<result property="dislike"	column="dislike"/>
-    	<result property="viewcount"	column="viewcount"/>
-    	<result property="localdto.state" column="state"/>
-    	<result property="localdto.city" column="city"/>
-    	<result property="localdto.gu" column="gu"/>
-    	<result property="localdto.dong" column="dong"/>
-    	<result property="usersdto.nickname" column="nickname"/>
+    	<result property="brd_like"	column="brd_like"/>
+    	<result property="brd_dislike" column="brd_dislike"/>
+    	<result property="viewcount" column="viewcount"/>
+    	<result property="state" column="state"/>
+    	<result property="city" column="city"/>
+    	<result property="gu" column="gu"/>
+    	<result property="dong" column="dong"/>
+   		<result property="nickname" column="nickname"/>
+   		<result property="r" column="r"/>
     </resultMap>
 	<delete id="delete" parameterType="int">
 		DELETE FROM board WHERE brd_id = #{pk}
@@ -37,9 +39,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 
 	<insert id="createReply" parameterType="BoardDTO">
-	INSERT INTO board(email, title, content, filename, filesize, loc_id, ca_id, create_time, ref, indent, ansno, refnum)
+	INSERT INTO board(email, title, content, filename, filesize, loc_id, ca_id, grp, indent, ansno, grpno)
 	VALUES(#{email}, #{title}, #{content}, #{filename, jdbcType=VARCHAR}, #{filesize, jdbcType=VARCHAR}, 
-		#{loc_id}, #{ca_id}, unix_timestamp(), #{grp}, #{indent}+1, #{ansno}+1, #{brd_id})
+		#{loc_id}, #{ca_id}, #{grp}, #{indent}+1, #{ansno}+1, #{brd_id})
 	</insert>
 
 	<update id="updateAnsno" parameterType="Map">
@@ -47,13 +49,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</update>
 	
 	<select id="readReply" parameterType="int" resultType="BoardDTO">
-	 SELECT title, grp, indent, ansno 
+	 SELECT title, grp, indent, ansno, grpno 
 	 FROM board WHERE brd_id = #{brd_id}
 	</select>
 	
 	<update id="update" parameterType="BoardDTO">
 	UPDATE board SET
-	update_time = unix_timestamp(),
 	title = #{title},
 	content = #{content}
 	<if test="filename != null and !filename.equals('')">
@@ -61,106 +62,103 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</if>
 	 WHERE brd_id = #{brd_id}
 	</update>
-	<update id="viewcount" parameterType="int">
+	<update id="updateViewcount" parameterType="int">
 		UPDATE board SET
 		viewcount = viewcount + 1
 		WHERE brd_id = #{brd_id}
 	</update>
 	<update id="updateLike" parameterType="int">
 		UPDATE board SET
-		like = like + 1
+		brd_like = brd_like + 1
 		WHERE brd_id = #{brd_id}
 	</update>
 	
 	<update id="updateDislike" parameterType="int">
 		UPDATE board SET
-		dislike = dislike + 1
+		brd_dislike = brd_dislike + 1
 		WHERE brd_id = #{brd_id}
 	</update>
 	
 	<insert id="create" parameterType="BoardDTO">
 		INSERT INTO board(
-		email, title, content, filename, filesize, loc_id, ca_id, create_time)
+		email, title, content, filename, filesize, loc_id, ca_id, grp)
 		VALUES(
 		#{email}, #{title}, #{content}, #{filename, jdbcType=VARCHAR}, #{filesize}, 
-		#{loc_id}, #{ca_id}, unix_timestamp())
+		#{loc_id}, #{ca_id}, (select IFNULL(MAX(grp), 0) + 1 from board b))
 	</insert> 
 
 	<select id="list" resultMap="oneMap" parameterType="Map">
+<!-- 		select -->
+<!-- 		brd_id, title, nickname, email, create_time, filename, indent, brd_like, brd_dislike, viewcount -->
+<!-- 		from( -->
 		select
-		title, nickname, date_format(create_time) time, filename, indent, like, dislike, viewcount, r
-		from(
-		select
-		title, nickname, time, filename, indent, like, dislike, viewcount, rownum r
+		brd_id, title, nickname, email, create_time, filename, indent, brd_like, brd_dislike, viewcount
 		from (
 		select
-		b.title title, u.nickname nickname, b.create_time time, b.filename filename, b.indent indent,
-		b.like like, b.dislike dislike, b.viewcount viewcount
-		from board b, users u
+		b.brd_id brd_id, b.title title, u.nickname nickname, b.email email, b.create_time create_time, b.filename filename, b.indent indent,
+		b.brd_like brd_like, b.brd_dislike brd_dislike, b.viewcount viewcount
+		from board b inner join users u on b.email = u.email 
 		<where>
-			<if test="loc_id!=null">
-			b.loc_id = #{loc_id} and
+			<if test="loc_id!=-1">
+			loc_id = #{loc_id}
 			</if>
-			<if test="ca_id!=null">
-			b.ca_id = #{ca_id}
+			<if test="ca_id!=-1">
+			and ca_id = #{ca_id}
 			</if>
 			<choose>
 				<when test="col=='nickname'">
-					and	name like '%'||#{word}||'%'
+					and u.nickname like CONCAT('%',#{word},'%')
 				</when>
-				<when test="col=='subject'">
-					and	subject like '%'||#{word}||'%'
+				<when test="col=='title'">
+					and title like CONCAT('%',#{word},'%')
 				</when>
 				<when test="col=='content'">
-					and	content like '%'||#{word}||'%'
+					and content like CONCAT('%',#{word},'%')
 				</when>
 				<otherwise>
-					and	subject like '%'||#{word}||'%'
-					or
-					content like
-					'%'||#{word}||'%'
+					and title like CONCAT('%',#{word},'%')
+					or content like CONCAT('%',#{word},'%')
 				</otherwise>
 			</choose>
 		</where>
-		ORDER BY grp DESC, ansno ASC
-		)
-		)                                                                            
+		ORDER BY grp DESC, ansno ASC, brd_id DESC
+		) sub1
+<!-- 		) sub2                                                                            -->
    <![CDATA[                                                                        
-   where r >= #{sno} and r <= ${eno}  
+   limit #{sno}, ${recordPerPage}  
    ]]>
 	</select>
 
 	<select id="read" resultMap="oneMap" parameterType="int">
 		select
-		b.brd_id, b.title, b.content, b.filename, b.filesize, b.grp, b.email, b.date_format(create_time), b.date_format(update_time),
-		b.ca_id, b.like, b.dislike, b.viewcount, u.nickname, l.state, l.city, l.gu, l.dong
+		b.brd_id brd_id, b.title title, b.content content, b.filename filename, b.filesize filesize, b.grp grp, b.email email, b.create_time create_tiem, b.update_time update_time,
+		b.ca_id ca_id, b.brd_like brd_like, b.brd_dislike brd_dislike, b.viewcount viewcount, u.nickname nickname, l.state state, l.city city, l.gu gu, l.dong dong
 		from board b, users u, local l
 		where b.brd_id = #{pk} and b.email = u.email and b.loc_id = l.loc_id 
 	</select>
 
 	<select id="total" parameterType="Map" resultType="int">
-		SELECT COUNT(*) FROM board, 
+		SELECT COUNT(*) FROM board b
 		<where>
-			<if test="loc_id!=null">
-			b.loc_id = #{loc_id} and
+			<if test="loc_id!=-1">
+			loc_id = #{loc_id}
 			</if>
-			<if test="ca_id!=null">
-			b.ca_id = #{ca_id}
+			<if test="ca_id!=-1">
+			and ca_id = #{ca_id} and
 			</if>
 			<choose>
 				<when test="col=='nickname'">
-					and name like '%'||#{word}||'%'
+					u.nickname like CONCAT('%',#{word},'%')
 				</when>
-				<when test="col=='subject'">
-					and subject like '%'||#{word}||'%'
+				<when test="col=='title'">
+					title like CONCAT('%',#{word},'%')
 				</when>
 				<when test="col=='content'">
-					and content like '%'||#{word}||'%'
+					content like CONCAT('%',#{word},'%')
 				</when>
 				<otherwise>
-					and subject like '%'||#{word}||'%'
-					or 
-					content like '%'||#{word}||'%'
+					title like CONCAT('%',#{word},'%')
+					or content like CONCAT('%',#{word},'%')
 				</otherwise>
 			</choose>
 		</where>

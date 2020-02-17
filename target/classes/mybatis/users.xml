@@ -16,36 +16,31 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<update id="updateGrade" parameterType="String">
 		update users set
-		grade = #{grade},
-		update_time = unix_timestamp()
+		grade = #{grade}
 		where email = #{email}
 	</update>
 	
 	<update id="updateIntroduction" parameterType="String">
 		update users set
-		introduction = #{introduction},
-		update_time = unix_timestamp()
+		introduction = #{introduction}
 		where email = #{email}
 	</update>
 	
 	<update id="updateFname" parameterType="String">
 		update users set
-		fname = #{fname},
-		update_time = unix_timestamp()
+		fname = #{fname}
 		where email = #{email}
 	</update>
 	
 	<update id="updateBirthday" parameterType="String">
 		update users set
-		birthday = #{birthday},
-		update_time = unix_timestamp()
+		birthday = #{birthday}
 		where email = #{email}
 	</update>
 	
 	<update id="updateGender" parameterType="String">
 		update users set
-		gender = #{gender},
-		update_time = unix_timestamp()
+		gender = #{gender}
 		where email = #{email}
 	</update>
 	

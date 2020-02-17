@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+<style type="text/css">
+</style>
+
+<script type="text/javascript"	src="${pageContext.request.contextPath}/ckeditor/ckeditor.js"></script>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<script type="text/javascript">
+	function incheck(f) {
+		if (f.name.value == "") {
+			alert("이름을 입력해주세요");
+			f.name.focus();
+			return false;
+		}
+		if (f.title.value == "") {
+			alert("제목을 입력해주세요")
+			f.title.focus();
+			return false;
+		}
+		if (CKEDITOR.instances['content'].getData() == '') {
+			window.alert('내용을 입력해 주세요.');
+			CKEDITOR.instances['content'].focus();
+			return false;
+		}
+		if (f.passwd.value == "") {
+			alert("비밀번호를 입력해주세요")
+			f.passwd.focus();
+			return false;
+		}
+
+	}
+</script>
+</head>
+<body class="w3-light-grey w3-content">
+<div style="align: center">
+	<div class="w3-container" style="background-color: white; position: absolute; height: 400px; width: 500px; top: 50%; left: 50%; margin: -100px 0 0 -150px">
+	<div class="w3-container w3-purple" style="width: 500px;">
+	<h3>회원가입</h3>
+	</div>
+	<input name="email" type="email" size="45" placeholder="example@example.com" onkeyup="checkEmail()">
+	<b id="emailPannel"></b>
+	<input name="password" type="password" size="45" placeholder="비밀번호를 입력해주세요" onkeyup="checkPassword()">
+	<b id="pwPannel"></b>
+	<input name="password2" type="password" size="45" placeholder="비밀번호를 다시 입력해주세요." onkeyup="checkPassword()">
+	<b id="pw2Pannel"></b>
+	<input name="nickname" type="text" size="45" placeholder="닉네임을 입력해주세요." onkeyup="checkNickname()">
+	<b id="nicknamePannel"></b>
+	</div>
+</div>
+</body>
+</html>

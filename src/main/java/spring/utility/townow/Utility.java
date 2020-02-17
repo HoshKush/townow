@@ -26,7 +26,7 @@ public class Utility {
 	  * @return 페이징 생성 문자열
 	  */ 
 	 public static String paging(int totalRecord, int recordPerPage, String url,
-			 int brd_id, int ca_id, int loc_id, int nowPage, String col, String word){ 
+			 int ca_id, int loc_id, int nowPage, String col, String word){ 
 	   int pagePerBlock = 10; // 블럭당 페이지 수 
 	   int totalPage = (int)(Math.ceil((double)totalRecord/recordPerPage)); // 전체 페이지  
 	   int totalGrp = (int)(Math.ceil((double)totalPage/pagePerBlock));// 전체 그룹 
@@ -67,7 +67,7 @@ public class Utility {
 	 
 	   int _nPage = (nowGrp-1) * pagePerBlock; // 10개 이전 페이지로 이동 
 	   if (nowGrp >= 2){ 
-	     str.append("<span class='span_box_1'><A href='./"+url+"?nowPage="+nowPage+"&col="+col+"&word="+word+"&brd_id="+brd_id+"&ca_id="+ca_id+"&loc_id="+loc_id+"'>이전</A></span>"); 
+	     str.append("<span class='span_box_1'><A href='./"+url+"?nowPage="+nowPage+"&col="+col+"&word="+word+"&ca_id="+ca_id+"&loc_id="+loc_id+"'>이전</A></span>"); 
 	   } 
 	 
 	   for(int i=startPage; i<=endPage; i++){ 
@@ -78,13 +78,13 @@ public class Utility {
 	     if (nowPage == i){ 
 	       str.append("<span class='span_box_2'>"+i+"</span>"); 
 	     }else{ 
-	       str.append("<span class='span_box_1'><A href='./"+url+"?nowPage="+i+"&col="+col+"&word="+word+"&brd_id="+brd_id+"&ca_id="+ca_id+"&loc_id="+loc_id+"'>"+i+"</A></span>");   
+	       str.append("<span class='span_box_1'><A href='./"+url+"?nowPage="+i+"&col="+col+"&word="+word+"&ca_id="+ca_id+"&loc_id="+loc_id+"'>"+i+"</A></span>");   
 	     } 
 	   } 
 	    
 	   _nPage = (nowGrp * pagePerBlock)+1; // 10개 다음 페이지로 이동 
 	   if (nowGrp < totalGrp){ 
-	     str.append("<span class='span_box_1'><A href='./"+url+"?nowPage="+nowPage+"&col="+col+"&word="+word+"&brd_id="+brd_id+"&ca_id="+ca_id+"&loc_id="+loc_id+"'>다음</A></span>"); 
+	     str.append("<span class='span_box_1'><A href='./"+url+"?nowPage="+nowPage+"&col="+col+"&word="+word+"&ca_id="+ca_id+"&loc_id="+loc_id+"'>다음</A></span>"); 
 	   } 
 	   str.append("</DIV>"); 
 	    
@@ -103,7 +103,6 @@ public class Utility {
 		codes.put("A08", "법조인");
 		codes.put("A09", "종교/언론/예술인");
 		codes.put("A10", "기타");
-		codes.put("A11", "백수");
 		
 		value=(String)codes.get(code);
 		return value;
@@ -114,6 +113,10 @@ public class Utility {
 			str="";
 		}
 		return str;
+	}
+	
+	public static boolean isNull(String str) {
+		return str == null ? true : false;
 	}
 	
 
@@ -145,7 +148,7 @@ public class Utility {
 		return flag;
 	}
 	
-	 public static String paging3(int totalRecord, int nowPage, int recordPerPage, String col, String word){ 
+	 public static String paging3(int totalRecord, int nowPage, int recordPerPage, int ca_id, int loc_id, String col, String word){ 
 		   int pagePerBlock = 10; // 블럭당 페이지 수 
 		   int totalPage = (int)(Math.ceil((double)totalRecord/recordPerPage)); // 전체 페이지  
 		   int totalGrp = (int)(Math.ceil((double)totalPage/pagePerBlock));// 전체 그룹 
@@ -186,7 +189,7 @@ public class Utility {
 		
 		   int _nowPage = (nowGrp-1) * pagePerBlock; // 10개 이전 페이지로 이동 
 		   if (nowGrp >= 2){ 
-		     str.append("<span class='span_box_1'><A href='./list.do?col="+col+"&word="+word+"&nowPage="+_nowPage+"'>이전</A></span>"); 
+		     str.append("<span class='span_box_1'><A href='./list?col="+col+"&word="+word+"&nowPage="+_nowPage+"&ca_id="+ca_id+"&loc_id="+loc_id+"'>이전</A></span>"); 
 		   } 
 		 
 		   for(int i=startPage; i<=endPage; i++){ 
@@ -197,13 +200,13 @@ public class Utility {
 		     if (nowPage == i){ 
 		       str.append("<span class='span_box_2'>"+i+"</span>"); 
 		     }else{ 
-		       str.append("<span class='span_box_1'><A href='./list.do?col="+col+"&word="+word+"&nowPage="+i+"'>"+i+"</A></span>");   
+		       str.append("<span class='span_box_1'><A href='./list?col="+col+"&word="+word+"&nowPage="+i+"&ca_id="+ca_id+"&loc_id="+loc_id+"'>"+i+"</A></span>");   
 		     } 
 		   } 
 		    
 		   _nowPage = (nowGrp * pagePerBlock)+1; // 10개 다음 페이지로 이동 
 		   if (nowGrp < totalGrp){ 
-		     str.append("<span class='span_box_1'><A href='./list.do?col="+col+"&word="+word+"&nowPage="+_nowPage+"'>다음</A></span>"); 
+		     str.append("<span class='span_box_1'><A href='./list?col="+col+"&word="+word+"&nowPage="+_nowPage+"&ca_id="+ca_id+"&loc_id="+loc_id+"'>다음</A></span>"); 
 		   } 
 		   str.append("</DIV>"); 
 		    

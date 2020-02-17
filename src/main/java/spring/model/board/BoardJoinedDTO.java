@@ -2,9 +2,7 @@ package spring.model.board;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import spring.model.users.UsersDTO;
-
-public class BoardDTO {
+public class BoardJoinedDTO {
 	private int brd_id	 	;
 	private String title	 	;
 	private String content	;
@@ -23,47 +21,43 @@ public class BoardDTO {
 	private int brd_dislike 	     ;
 	private int viewcount 	 ;
 	private int ca_id;
-	private UsersDTO usersdto;
+	private String nickname;
+	private String state;
+	private String city;
+	private String gu;
+	private String dong;
+	private int r;
 	
-	public BoardDTO() {
-		super();   
-	}              
-	               
-	public BoardDTO(int brd_id, String title, String content, String filename,
-			int grpno, int indent, int ansno, int grp, String email, String create_time, String update_time,
-			int loc_id, int brd_like, int brd_dislike, int viewcount, int ca_id, UsersDTO usersdto, int filesize) {
-		super();
-		this.brd_id = brd_id;
-		this.title = title;
-		this.content = content;
-		this.filename = filename;
-		this.filesize = filesize;
-		this.grpno = grpno;
-		this.indent = indent;
-		this.ansno = ansno;
-		this.grp = grp;
-		this.email = email;
-		this.create_time = create_time;
-		this.update_time = update_time;
-		this.loc_id = loc_id;
-		this.brd_like = brd_like;
-		this.brd_dislike = brd_dislike;
-		this.viewcount = viewcount;
-		this.ca_id = ca_id;
-		this.usersdto = usersdto;
-	}
 	
-	public UsersDTO getUsersdto() {
-		return usersdto;
+	public int getR() {
+		return r;
 	}
-	public void setUsersdto(UsersDTO usersdto) {
-		this.usersdto = usersdto;
+	public void setR(int r) {
+		this.r = r;
 	}
-	public int getCa_id() {
-		return ca_id;
+	public String getState() {
+		return state;
 	}
-	public void setCa_id(int ca_id) {
-		this.ca_id = ca_id;
+	public void setState(String state) {
+		this.state = state;
+	}
+	public String getCity() {
+		return city;
+	}
+	public void setCity(String city) {
+		this.city = city;
+	}
+	public String getGu() {
+		return gu;
+	}
+	public void setGu(String gu) {
+		this.gu = gu;
+	}
+	public String getDong() {
+		return dong;
+	}
+	public void setDong(String dong) {
+		this.dong = dong;
 	}
 	public int getBrd_id() {
 		return brd_id;
@@ -148,7 +142,7 @@ public class BoardDTO {
 	}
 	public void setLoc_id(int loc_id) {
 		this.loc_id = loc_id;
-	}	
+	}
 	public int getBrd_like() {
 		return brd_like;
 	}
@@ -166,6 +160,18 @@ public class BoardDTO {
 	}
 	public void setViewcount(int viewcount) {
 		this.viewcount = viewcount;
+	}
+	public int getCa_id() {
+		return ca_id;
+	}
+	public void setCa_id(int ca_id) {
+		this.ca_id = ca_id;
+	}
+	public String getNickname() {
+		return nickname;
+	}
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
 	}
 	
 	

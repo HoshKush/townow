@@ -9,11 +9,16 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import spring.model.board.BoardDAO;
 import spring.model.board.BoardDTO;
+import spring.model.board.BoardJoinedDTO;
 import spring.model.board.BoardService;
 import spring.model.board.CommentDAO;
 import spring.utility.townow.Utility;
@@ -30,37 +35,25 @@ public class BoardController {
 	@Autowired
 	private BoardService mgr;
 	
-	@RequestMapping(value = "/board/updateLike")
-	public String updateLike(int brd_id, Model model, String nowPage, String col, String word,
-			int loc_id, int ca_id) {
-		if(dao.updateLike(brd_id)) {
-			model.addAttribute("nowPage", nowPage);
-			model.addAttribute("col", col);
-			model.addAttribute("word", word);
-			model.addAttribute("brd_id", brd_id);
-			model.addAttribute("loc_id", loc_id);
-			model.addAttribute("ca_id", ca_id);
-			
-			return "redirect:/board/read";
+	@ResponseBody
+	@RequestMapping(value = "/updateLike")
+	public String updateLike(int brd_id) throws Exception {
+		if(dao.updateLike(brd_id)) {			
+			BoardJoinedDTO dto = (BoardJoinedDTO) dao.read(brd_id);
+			return String.valueOf(dto.getBrd_like());
 		} else {
-			return "/error";
+			return "예기치 못한 오류가 발생하였습니다. 관리자에게 문의하세요.";
 		}
 	}
 	
-	@RequestMapping(value = "/board/updateDislike")
-	public String updateDislike(int brd_id, Model model, String nowPage, String col, String word,
-			int loc_id, int ca_id) {
+	@ResponseBody
+	@RequestMapping(value = "/updateDislike")
+	public String updateDislike(int brd_id) throws Exception {
 		if(dao.updateDislike(brd_id)) {
-			model.addAttribute("nowPage", nowPage);
-			model.addAttribute("col", col);
-			model.addAttribute("word", word);
-			model.addAttribute("brd_id", brd_id);
-			model.addAttribute("loc_id", loc_id);
-			model.addAttribute("ca_id", ca_id);
-			
-			return "redirect:/board/read";
+			BoardJoinedDTO dto = (BoardJoinedDTO) dao.read(brd_id);
+			return String.valueOf(dto.getBrd_dislike());
 		} else {
-			return "/error";
+			return "예기치 못한 오류가 발생하였습니다. 관리자에게 문의하세요.";
 		}
 	}
 	
@@ -81,32 +74,40 @@ public class BoardController {
 		}
 	}
 
-	@RequestMapping(value = "/delete", method = RequestMethod.POST)
-	public String delete(int brd_id, String oldfile, HttpServletRequest request, Model model) throws Exception {
-
-		String bassPath = request.getRealPath("/storage");
-
-		if (dao.delete(brd_id)) {
-			Utility.deleteFile(bassPath, oldfile);
-			model.addAttribute("col", request.getParameter("col"));
-			model.addAttribute("word", request.getParameter("word"));
-			model.addAttribute("nowPage", request.getParameter("nowPage"));
-			model.addAttribute("loc_id", request.getParameter("loc_id"));
-			model.addAttribute("ca_id", request.getParameter("ca_id"));
-			return "redirect:/list";
+//	@RequestMapping(value = "/delete", method = RequestMethod.POST)
+//	public String delete(int brd_id, String oldfile, HttpServletRequest request, Model model) throws Exception {
+//		String bassPath = request.getRealPath("/storage");
+//
+//		if (dao.delete(brd_id)) {
+//			Utility.deleteFile(bassPath, oldfile);
+//			model.addAttribute("col", request.getParameter("col"));
+//			model.addAttribute("word", request.getParameter("word"));
+//			model.addAttribute("nowPage", request.getParameter("nowPage"));
+//			model.addAttribute("loc_id", request.getParameter("loc_id"));
+//			model.addAttribute("ca_id", request.getParameter("ca_id"));
+//			return "redirect:/list";
+//		} else {
+//			return "/error";
+//		}
+//	}
+	
+	@ResponseBody
+	@RequestMapping(value="/deleteArticle", method=RequestMethod.GET, produces="text/plain;charset=utf-8")
+	public String delete(int brd_id, HttpServletRequest request) throws Exception {
+		BoardJoinedDTO dto = (BoardJoinedDTO) dao.read(brd_id);
+		String oldfile = dto.getFilename();
+		String basePath = request.getRealPath("/storage");
+		
+		if (dao.hasGroup(brd_id)) {
+			return "답글이 있어 삭제할 수 없습니다.";
 		} else {
-			return "/error";
+			if(dao.delete(brd_id)) {
+				Utility.deleteFile(basePath, oldfile);
+				return "s삭제되었습니다.";
+			} else {
+				return "삭제에 실패하였습니다. 관리자에게 문의해주세요.";
+			}
 		}
-	}
-
-	@RequestMapping(value = "/delete", method = RequestMethod.GET)
-	public String delete(int brd_id) {
-		boolean flag = dao.hasGroup(brd_id);
-
-		if (flag)
-			return "/hasGroupError";
-		else
-			return "/delete";
 	}
 
 	@RequestMapping(value = "/reply", method = RequestMethod.POST)
@@ -116,7 +117,6 @@ public class BoardController {
 
 		dto.setFilename(Utility.saveFileSpring(dto.getFilenameMF(), bassPath));
 		dto.setFilesize((int) dto.getFilenameMF().getSize());
-		System.out.println("2" + mgr);
 		boolean flag = mgr.reply(dto);
 
 		if (flag) {
@@ -182,7 +182,7 @@ public class BoardController {
 	@RequestMapping(value = "/update", method = RequestMethod.GET)
 	public String update(int brd_id, Model model) throws Exception {
 
-		BoardDTO dto = (BoardDTO) dao.read(brd_id);
+		BoardJoinedDTO dto = (BoardJoinedDTO) dao.read(brd_id);
 
 		model.addAttribute("dto", dto);
 
@@ -192,7 +192,7 @@ public class BoardController {
 	@RequestMapping("/read")
 	public String read(int brd_id, Model model, String email) throws Exception {
 		dao.updateViewcount(brd_id);
-		BoardDTO dto = (BoardDTO) dao.read(brd_id);
+		BoardJoinedDTO dto = (BoardJoinedDTO) dao.read(brd_id);
 		String content = dto.getContent().replaceAll("\r\n", "<br>");
 		model.addAttribute("dto", dto);
 		model.addAttribute("content", content);
@@ -201,33 +201,34 @@ public class BoardController {
 		return "/read";
 	}
 
-	@RequestMapping(value = "/create", method = RequestMethod.POST)
+	@PostMapping("/create")
 	public String create(BoardDTO dto, HttpServletRequest request, Model model) throws Exception {
 		String upDir = request.getRealPath("/storage");
-
+		System.out.println(dto.getEmail());
 		// 업로드 처리
-
+		
 		dto.setFilename(Utility.saveFileSpring(dto.getFilenameMF(), upDir));
 		dto.setFilesize((int) dto.getFilenameMF().getSize());
 
 		boolean flag = dao.create(dto);
 		if (flag) {
+			System.out.println("성공");
 			model.addAttribute("col", request.getParameter("col"));
 			model.addAttribute("word", request.getParameter("word"));
 			model.addAttribute("nowPage", request.getParameter("nowPage"));
 			model.addAttribute("loc_id", request.getParameter("loc_id"));
 			model.addAttribute("ca_id", request.getParameter("ca_id"));
-			model.addAttribute("brd_id", request.getParameter("brd_id"));
 			return "redirect:/list";
 		} else {
+			System.out.println("실패");
 			return "/error";
 		}
 
 	}
 
-	@RequestMapping(value = "/create", method = RequestMethod.GET)
+	@GetMapping("/create")
 	public String create() {
-
+		System.out.println("create 호출");
 		return "/create";
 	}
 
@@ -235,44 +236,42 @@ public class BoardController {
 	public String list(HttpServletRequest request) throws Exception {
 		String col = Utility.checkNull(request.getParameter("col"));
 		String word = Utility.checkNull(request.getParameter("word"));
-		int loc_id = Integer.parseInt(request.getParameter("loc_id"));
-		int ca_id = Integer.parseInt(request.getParameter("ca_id"));
-		int brd_id = Integer.parseInt(request.getParameter("brd_id"));
+		int loc_id = -1;
+		int ca_id = -1;
 		if (col.equals("total"))
 			word = "";
-
-		String url = "list";
 
 		int nowPage = 1;
 
 		int recordPerPage = 10;
-
-		if (request.getParameter("nowPage") != null) {
-
+		
+		if (request.getParameter("nowPage") != null && !request.getParameter("nowPage").equals("")){
 			nowPage = Integer.parseInt(request.getParameter("nowPage"));
-
+		}
+		if (request.getParameter("ca_id") != null && !request.getParameter("ca_id").equals("")) {
+			ca_id = Integer.parseInt(request.getParameter("ca_id"));
+		}
+		if (request.getParameter("loc_id") != null && !request.getParameter("loc_id").equals("")) {
+			loc_id = Integer.parseInt(request.getParameter("loc_id"));
 		}
 
-		int sno = ((nowPage - 1) * recordPerPage) + 1;
+		int sno = ((nowPage - 1) * recordPerPage);
 
-		int eno = nowPage * recordPerPage;
-
+//		int eno = nowPage * recordPerPage;
 		Map map = new HashMap();
 		map.put("col", col);
 		map.put("word", word);
 		map.put("loc_id", loc_id);
 		map.put("ca_id", ca_id);
-		map.put("brd_id", brd_id);
 		map.put("sno", sno);
-		map.put("eno", eno);
-
+		map.put("recordPerPage", recordPerPage);
+//		map.put("eno", eno);
 		// 1. model 사용
 
-		List<BoardDTO> list = dao.list(map);
-
+		List<BoardJoinedDTO> list = dao.list(map);
 		int total = dao.total(map);
-
-		String paging = Utility.paging(total, recordPerPage, url, brd_id, ca_id, loc_id, nowPage, col, word);
+		int i = 0;
+		String paging = Utility.paging3(total, nowPage, recordPerPage, ca_id, loc_id, col, word);
 
 		// 2. request 저장
 

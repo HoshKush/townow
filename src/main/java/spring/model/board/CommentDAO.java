@@ -42,7 +42,7 @@ public class CommentDAO implements DAOSTDInter {
 	@Override
 	public boolean delete(Object pk) throws Exception {
 		// TODO Auto-generated method stub
-		return mybatis.delete("comment.delete", (int) pk) > 0
+		return mybatis.delete("comment.delete", (Integer) pk) > 0
 				? true : false;
 	}
 
@@ -64,7 +64,7 @@ public class CommentDAO implements DAOSTDInter {
 	}
 	
 	public boolean hasGroup(int cmt_grp) {
-		return (int) mybatis.selectOne("comment.hasGroup", cmt_grp) > 0
+		return (Integer) mybatis.selectOne("comment.hasGroup", cmt_grp) > 0
 				? true : false;
 	}
 	

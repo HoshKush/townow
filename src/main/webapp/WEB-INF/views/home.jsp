@@ -9,6 +9,9 @@
 	Hello world! 오호식입니다.
 </h1>
 
+<button onclick="location.href='./board/create'">생성</button>
+<button onclick="location.href='./users/create'">회원가입</button>
+
 <P>  The time on the server is ${serverTime}. </P>
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
 				<a class="navbar-brand" href="#">Logo</a>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE  tiles-definitions PUBLIC 
+    "-//Aapche Software Foundation//DTD Tiles Configuration 2.0//EN" 
+    "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+
+<tiles-definitions> 
+     <definition name="main" template="/WEB-INF/views/template/template.jsp"> 
+        <put-attribute name="header" value="/WEB-INF/views/template/header.jsp" /> 
+        <put-attribute name="footer" value="/WEB-INF/views/template/footer.jsp" /> 
+    </definition>
+    <definition name="/users/create" extends="main"> 
+        <put-attribute name="title" value="users 생성" ></put-attribute> 
+        <put-attribute name="body" value="/WEB-INF/views/users/createForm.jsp" /> 
+    </definition>   
+    <definition name="/users/update" extends="main"> 
+        <put-attribute name="title" value="users 수정" ></put-attribute> 
+        <put-attribute name="body" value="/WEB-INF/views/users/updateForm.jsp" /> 
+    </definition>  
+    <definition name="/users/read" extends="main"> 
+        <put-attribute name="title" value="users 일기" ></put-attribute> 
+        <put-attribute name="body" value="/WEB-INF/views/users/read.jsp" /> 
+    </definition>  
+    <definition name="/users/reply" extends="main"> 
+        <put-attribute name="title" value="users 답변" ></put-attribute> 
+        <put-attribute name="body" value="/WEB-INF/views/users/replyForm.jsp" /> 
+    </definition>  
+    <definition name="/users/delete" extends="main"> 
+        <put-attribute name="title" value="users 삭제" ></put-attribute> 
+        <put-attribute name="body" value="/WEB-INF/views/users/deleteForm.jsp" /> 
+    </definition>  
+    <definition name="/users/list" extends="main"> 
+        <put-attribute name="title" value="users 목록" ></put-attribute> 
+        <put-attribute name="body" value="/WEB-INF/views/users/list.jsp" /> 
+    </definition>  
+   
+           
+   
+</tiles-definitions> 
