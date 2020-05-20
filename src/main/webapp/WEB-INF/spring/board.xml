@@ -12,27 +12,27 @@
         <put-attribute name="title" value="default page" ></put-attribute> 
         <put-attribute name="body" value="/WEB-INF/views/home.jsp" /> 
     </definition>   
-    <definition name="/board/create" extends="main"> 
+    <definition name="/create" extends="main"> 
         <put-attribute name="title" value="board 생성" ></put-attribute> 
         <put-attribute name="body" value="/WEB-INF/views/board/createForm.jsp" /> 
     </definition>   
-    <definition name="/board/update" extends="main"> 
+    <definition name="/update" extends="main"> 
         <put-attribute name="title" value="board 수정" ></put-attribute> 
         <put-attribute name="body" value="/WEB-INF/views/board/updateForm.jsp" /> 
     </definition>  
-    <definition name="/board/read" extends="main"> 
+    <definition name="/read" extends="main"> 
         <put-attribute name="title" value="board 일기" ></put-attribute> 
         <put-attribute name="body" value="/WEB-INF/views/board/read.jsp" /> 
     </definition>  
-    <definition name="/board/reply" extends="main"> 
+    <definition name="/reply" extends="main"> 
         <put-attribute name="title" value="board 답변" ></put-attribute> 
         <put-attribute name="body" value="/WEB-INF/views/board/replyForm.jsp" /> 
     </definition>  
-    <definition name="/board/delete" extends="main"> 
+    <definition name="/delete" extends="main"> 
         <put-attribute name="title" value="board 삭제" ></put-attribute> 
         <put-attribute name="body" value="/WEB-INF/views/board/deleteForm.jsp" /> 
     </definition>  
-    <definition name="/board/list" extends="main"> 
+    <definition name="/list" extends="main"> 
         <put-attribute name="title" value="board 목록" ></put-attribute> 
         <put-attribute name="body" value="/WEB-INF/views/board/list.jsp" /> 
     </definition>  

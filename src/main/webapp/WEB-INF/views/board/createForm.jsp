@@ -53,6 +53,7 @@
 			 onsubmit='return incheck(this)'>
 			 <input type="hidden" name="loc_id" value="1">
 			 <input type="hidden" name="ca_id" value="1">
+			 <input type="hidden" name="email" value="${email }">
 			<TABLE style="width: 800px;">
 				<TR>
 					<TD><input class="w3-input" type="text" name="title" placeholder="title" size="100"></TD>
@@ -60,18 +61,6 @@
 
 				<TR>
 					<TD><textarea class="w3-input" rows="20" cols="45" name="content" placeholder="content" style="resize: none;"></textarea></TD>
-				</TR>
-				<TR>
-					<TD>
-						<div class="w3-row-padding">
-							<div class="w3-third">
-								<input class="w3-input" type="text" name="email" placeholder="email" size="45">
-							</div>
-							<div class="w3-third">
-							<div class="w3-third"></div>
-							</div>
-						</div>
-					</TD>
 				</TR>
 				<tr>
 					<td><input class="w3-input" type="file" name="filenameMF"></td>

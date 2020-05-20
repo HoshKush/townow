@@ -254,9 +254,7 @@ public class BoardController {
 		if (request.getParameter("loc_id") != null && !request.getParameter("loc_id").equals("")) {
 			loc_id = Integer.parseInt(request.getParameter("loc_id"));
 		}
-
 		int sno = ((nowPage - 1) * recordPerPage);
-
 //		int eno = nowPage * recordPerPage;
 		Map map = new HashMap();
 		map.put("col", col);
@@ -265,9 +263,9 @@ public class BoardController {
 		map.put("ca_id", ca_id);
 		map.put("sno", sno);
 		map.put("recordPerPage", recordPerPage);
+		System.out.println("total >>>>>>>>>> " + dao.total(map));
 //		map.put("eno", eno);
 		// 1. model 사용
-
 		List<BoardJoinedDTO> list = dao.list(map);
 		int total = dao.total(map);
 		int i = 0;
@@ -282,7 +280,7 @@ public class BoardController {
 		request.setAttribute("nowPage", nowPage);
 		request.setAttribute("loc_id", loc_id);
 		request.setAttribute("ca_id", ca_id);
-
+		
 		// 3. view 페이지 선택
 
 		return "/list";

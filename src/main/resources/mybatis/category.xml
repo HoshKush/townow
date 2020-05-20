@@ -6,26 +6,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="category">
 	<insert id="create" parameterType="CategoryDTO">
 		insert into category(ca1_name, ca2_name)
-		values(#{ca1_name, ca2_name)
+		values(#{ca1_name}, #{ca2_name})
 	</insert>
-	
+	<select id="hasArticle" parameterType="int" resultType="int">
+		select count(*) from board where ca_id = #{ca_id}
+	</select>
 	<delete id="delete" parameterType="int">
 		delete from category
 		where ca_id = #{pk}
 	</delete>
-	
-	<select id="list" parameterType="Map" resultType="CategoryDAO">
-		select ca_id, ca1_name, ca2_name, @ROWNUM:=@ROWNUM + 1
-		from(
-			select ca_id, ca1_name, ca2_name, @ROWNUM:=0 
-			from(
-				select ca_id, ca1_name, ca2_name from category
-				<where>
-					<if test="ca1_name!=null">
-						ca1_name = #{ca1_name}
-					</if>
-				</where>
-				))
+	<select id="read" resultType="CategoryDTO" parameterType="int">
+		select * from category where ca_id = #{ca_id}
+	</select>
+	<select id="getCa1_names" resultType="String">
+		select ca1_name from category group by ca1_name order by ca1_name
+	</select>
+	<select id="hasCa2" resultType="int" parameterType="String">
+		select count(*) from category where ca1_name = #{ca1_name} and ca2_name != "-"
+	</select>
+	<select id="categoryList" parameterType="String" resultType="CategoryDTO">
+		select * from category where ca1_name = #{ca1_name} order by ca2_name
 	</select>
 	
 	<select id="total" parameterType="Map" resultType="int">

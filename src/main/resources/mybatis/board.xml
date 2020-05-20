@@ -99,25 +99,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		b.brd_like brd_like, b.brd_dislike brd_dislike, b.viewcount viewcount
 		from board b inner join users u on b.email = u.email 
 		<where>
-			<if test="loc_id!=-1">
-			loc_id = #{loc_id}
+			<if test='ca_id!=-1'>
+			ca_id = #{ca_id}
 			</if>
-			<if test="ca_id!=-1">
-			and ca_id = #{ca_id}
+			<if test='loc_id!=-1'>
+			and loc_id = #{loc_id}
 			</if>
 			<choose>
-				<when test="col=='nickname'">
+				<when test='col=="nickname"'>
 					and u.nickname like CONCAT('%',#{word},'%')
 				</when>
-				<when test="col=='title'">
+				<when test='col=="title"'>
 					and title like CONCAT('%',#{word},'%')
 				</when>
-				<when test="col=='content'">
+				<when test='col=="content"'>
 					and content like CONCAT('%',#{word},'%')
 				</when>
 				<otherwise>
-					and title like CONCAT('%',#{word},'%')
-					or content like CONCAT('%',#{word},'%')
+					and (title like CONCAT('%',#{word},'%')
+					or content like CONCAT('%',#{word},'%'))
 				</otherwise>
 			</choose>
 		</where>
@@ -136,7 +136,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		from board b, users u, local l
 		where b.brd_id = #{pk} and b.email = u.email and b.loc_id = l.loc_id 
 	</select>
-
+	
 	<select id="total" parameterType="Map" resultType="int">
 		SELECT COUNT(*) FROM board b
 		<where>
@@ -144,21 +144,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			loc_id = #{loc_id}
 			</if>
 			<if test="ca_id!=-1">
-			and ca_id = #{ca_id} and
+			and ca_id = #{ca_id} 
 			</if>
 			<choose>
 				<when test="col=='nickname'">
-					u.nickname like CONCAT('%',#{word},'%')
+				    and	u.nickname like CONCAT('%',#{word},'%')
 				</when>
 				<when test="col=='title'">
-					title like CONCAT('%',#{word},'%')
+					and title like CONCAT('%',#{word},'%')
 				</when>
 				<when test="col=='content'">
-					content like CONCAT('%',#{word},'%')
+					and content like CONCAT('%',#{word},'%')
 				</when>
 				<otherwise>
-					title like CONCAT('%',#{word},'%')
-					or content like CONCAT('%',#{word},'%')
+					and (title like CONCAT('%',#{word},'%')
+					or content like CONCAT('%',#{word},'%'))
 				</otherwise>
 			</choose>
 		</where>

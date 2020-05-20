@@ -9,29 +9,7 @@
 <script type="text/javascript"	src="${pageContext.request.contextPath}/ckeditor/ckeditor.js"></script>
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <script type="text/javascript">
-	function incheck(f) {
-		if (f.name.value == "") {
-			alert("이름을 입력해주세요");
-			f.name.focus();
-			return false;
-		}
-		if (f.title.value == "") {
-			alert("제목을 입력해주세요")
-			f.title.focus();
-			return false;
-		}
-		if (CKEDITOR.instances['content'].getData() == '') {
-			window.alert('내용을 입력해 주세요.');
-			CKEDITOR.instances['content'].focus();
-			return false;
-		}
-		if (f.passwd.value == "") {
-			alert("비밀번호를 입력해주세요")
-			f.passwd.focus();
-			return false;
-		}
-
-	}
+	alert("메롱");
 </script>
 </head>
 <body class="w3-light-grey w3-content">

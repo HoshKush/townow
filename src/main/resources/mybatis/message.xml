@@ -6,9 +6,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="message">
 	<insert id="create" parameterType="MessageDTO">
 		insert into message(
-		recipient, sender, msg_content, msg_read
+		recipient, sender, msg_content
 		) values (
-		#{recipient}, #{sender}, #{msg_content}, #{msg_read}
+		#{recipient}, #{sender}, #{msg_content}
 		)
 	</insert>
 
@@ -44,11 +44,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</delete>
 
 	<select id="list" parameterType="Map" resultType="MessageDTO">
-		select
-		msg_id, msg_status, recipient, sender, msg_content, create_time, read_time, r
-		from(
 			select
-			msg_id, msg_status, recipient, sender, msg_content, create_time, read_time, rownum r
+			msg_id, msg_status, recipient, sender, msg_content, create_time, read_time,
 			from(
 				select
 				msg_id, msg_status, recipient, sender, msg_content, create_time, read_time
@@ -68,7 +65,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				order by msg_id DESC
 		))
 		<![CDATA[
-		where r >= #{sno} and r<=#{eno}
+		limit #{sno}, #{recordPerpage}
 		]]>
 	</select>
 	

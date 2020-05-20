@@ -8,7 +8,14 @@ public class MessageDTO {
 	private String msg_content;
 	private String create_time;
 	private String read_time;
+	private char msg_status;
 	
+	public char getMsg_status() {
+		return msg_status;
+	}	
+	public void setMsg_status(char msg_status) {
+		this.msg_status = msg_status;
+	}
 	public char getMsg_delete() {
 		return msg_delete;
 	}

@@ -1,3 +1,5 @@
 eclipse.preferences.version=1
 encoding//src/main/webapp/WEB-INF/views/board/createForm.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/message/createForm.jsp=UTF-8
 encoding//src/main/webapp/WEB-INF/views/users/createForm.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/users/gender.jsp=UTF-8

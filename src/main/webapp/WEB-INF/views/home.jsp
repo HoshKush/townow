@@ -11,6 +11,10 @@
 
 <button onclick="location.href='./board/create'">생성</button>
 <button onclick="location.href='./users/create'">회원가입</button>
+<button onclick="location.href='./users/login'">로그인</button>
+<button onclick="location.href='./category/list'">카테고리보기</button>
+
+
 
 <P>  The time on the server is ${serverTime}. </P>
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
@@ -49,7 +53,7 @@
 <%-- 								<a class="dropdown-item" href="${root }/gallery/create">이미지 작성</a>  --%>
 <%-- 								<a class="dropdown-item" href="${root }/gallery/list">이미지 목록</a> --%>
 <!-- 							</div></li> -->
-<!-- 					</ul> -->
+					</ul>
 					<ul class="nav navbar-nav navbar-right">
 <%-- 						<c:choose> --%>
 <%-- 							<c:when test="${empty id}"> --%>

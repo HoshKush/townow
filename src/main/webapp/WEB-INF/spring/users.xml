@@ -12,9 +12,21 @@
         <put-attribute name="title" value="users 생성" ></put-attribute> 
         <put-attribute name="body" value="/WEB-INF/views/users/createForm.jsp" /> 
     </definition>   
+    <definition name="/users/addInfo" extends="main"> 
+        <put-attribute name="title" value="users 생성" ></put-attribute> 
+        <put-attribute name="body" value="/WEB-INF/views/users/addInfo.jsp" /> 
+    </definition>   
     <definition name="/users/update" extends="main"> 
         <put-attribute name="title" value="users 수정" ></put-attribute> 
         <put-attribute name="body" value="/WEB-INF/views/users/updateForm.jsp" /> 
+    </definition>  
+    <definition name="/users/updatePassword" extends="main"> 
+        <put-attribute name="title" value="users 비밀번호 수정" ></put-attribute> 
+        <put-attribute name="body" value="/WEB-INF/views/users/updatePassword.jsp" /> 
+    </definition>  
+    <definition name="/users/login" extends="main"> 
+        <put-attribute name="title" value="users 수정" ></put-attribute> 
+        <put-attribute name="body" value="/WEB-INF/views/users/loginForm.jsp" /> 
     </definition>  
     <definition name="/users/read" extends="main"> 
         <put-attribute name="title" value="users 일기" ></put-attribute> 
@@ -32,6 +44,7 @@
         <put-attribute name="title" value="users 목록" ></put-attribute> 
         <put-attribute name="body" value="/WEB-INF/views/users/list.jsp" /> 
     </definition>  
+    
    
            
    

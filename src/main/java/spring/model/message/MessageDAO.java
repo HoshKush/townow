@@ -33,7 +33,7 @@ public class MessageDAO implements DAOSTDInter {
 
 	@Override
 	public Object read(Object pk) throws Exception {
-		return mybatis.selectOne("message.read", (int) pk);
+		return mybatis.selectOne("message.read", (Integer) pk);
 	}
 
 	@Override
@@ -44,7 +44,7 @@ public class MessageDAO implements DAOSTDInter {
 
 	@Override
 	public boolean delete(Object pk) throws Exception {
-		return mybatis.delete("message.delete", (int) pk) > 0
+		return mybatis.delete("message.delete", (Integer) pk) > 0
 				? true : false;
 	}
 

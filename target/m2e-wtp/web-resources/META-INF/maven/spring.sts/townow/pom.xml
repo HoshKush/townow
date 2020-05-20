@@ -19,7 +19,7 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>6.0.6</version>
+			<version>8.0.12</version>
 		</dependency>
 
 		<!-- 인터페이스없이 transaction사용시 에러예방 -->

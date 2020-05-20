@@ -28,11 +28,18 @@ public class CategoryDAO implements DAOSTDInter {
 	public List list(Map map) throws Exception {
 		return mybatis.selectList("category.list", map);
 	}
+	
+	public List getCa1_names() {
+		return mybatis.selectList("category.getCa1_names");
+	}
+	
+	public List categoryList(String ca1_name) {
+		return mybatis.selectList("category.categoryList", ca1_name);
+	}
 
 	@Override
 	public Object read(Object pk) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		return mybatis.selectOne("category.read", (Integer)pk);
 	}
 
 	@Override
@@ -43,8 +50,12 @@ public class CategoryDAO implements DAOSTDInter {
 
 	@Override
 	public boolean delete(Object pk) throws Exception {
-		return mybatis.delete("category.delete", (int) pk) > 0
+		return mybatis.delete("category.delete", (Integer) pk) > 0
 				? true : false;
+	}
+	
+	public int hasCategory2(String ca1_name) {
+		return mybatis.selectOne("category.hasCa2", ca1_name);
 	}
 
 	@Override
@@ -52,4 +63,7 @@ public class CategoryDAO implements DAOSTDInter {
 		return mybatis.selectOne("category.total", map);
 	}
 	
+	public int hasArticle(int ca_id) {
+		return mybatis.selectOne("category.hasArticle", ca_id);
+	}
 }

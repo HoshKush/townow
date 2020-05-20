@@ -105,7 +105,15 @@ public class UsersDAO implements DAOSTDInter {
 		return (Integer) mybatis.selectOne("users.duplicateEmail", email);
 	}
 	
+	public int duplicateNickname(String nickname) {
+		return (Integer) mybatis.selectOne("users.duplicateNickname", nickname);
+	}
+	
 	public String getPwFind(Map map) {
 		return mybatis.selectOne("users.getPwFind", map);
+	}
+	
+	public String getGrade(String email) {
+		return mybatis.selectOne("users.getGrade", email);
 	}
 }
